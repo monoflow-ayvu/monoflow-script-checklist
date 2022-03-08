@@ -84,8 +84,156 @@
         ]
       },
       {
+        "label": "Habilitar bloqueio?",
+        "tableView": false,
+        "key": "enableLock",
+        "type": "checkbox",
+        "input": true,
+        "defaultValue": false
+      },
+      {
+        "label": "Bloqueio",
+        "key": "bloqueio",
+        "conditional": {
+          "show": true,
+          "when": "enableLock",
+          "eq": "true"
+        },
+        "type": "well",
+        "input": false,
+        "tableView": false,
+        "components": [
+          {
+            "label": "Output para bloqueio",
+            "widget": "choicesjs",
+            "tableView": true,
+            "defaultValue": "relay1",
+            "data": {
+              "values": [
+                {
+                  "label": "Relay 1",
+                  "value": "MONOFLOW_RELAY_1"
+                },
+                {
+                  "label": "Relay 2",
+                  "value": "MONOFLOW_RELAY_2"
+                },
+                {
+                  "label": "Buzzer",
+                  "value": "MONOFLOW_BUZ_1"
+                }
+              ]
+            },
+            "key": "lockOutput",
+            "type": "select",
+            "input": true
+          },
+          {
+            "label": "Minutos liberado no checklist",
+            "tooltip": "Tempo (minutos) para manter a máquina liberada quando acessar ao checklist. Se demorar mais desse tempo, a máquina bloqueia novamente.",
+            "mask": false,
+            "tableView": false,
+            "defaultValue": 0,
+            "delimiter": false,
+            "requireDecimal": false,
+            "inputFormat": "plain",
+            "truncateMultipleSpaces": false,
+            "key": "lockChecklistTime",
+            "type": "number",
+            "input": true
+          }
+        ]
+      },
+      {
+        "label": "Habilitar tags especiais?",
+        "tableView": false,
+        "key": "enableSpecialTags",
+        "type": "checkbox",
+        "input": true,
+        "defaultValue": false
+      },
+      {
+        "label": "Tags especiais",
+        "reorder": false,
+        "addAnother": "Adicionar",
+        "addAnotherPosition": "bottom",
+        "layoutFixed": false,
+        "enableRowGroups": false,
+        "initEmpty": false,
+        "tableView": false,
+        "defaultValue": [
+          {
+            "tag": "",
+            "action": "",
+            "customChecklistId": ""
+          }
+        ],
+        "key": "specialTags",
+        "conditional": {
+          "show": true,
+          "when": "enableSpecialTags",
+          "eq": "true"
+        },
+        "type": "datagrid",
+        "input": true,
+        "components": [
+          {
+            "label": "Tag",
+            "tooltip": "Nome do tag",
+            "tableView": true,
+            "validate": {
+              "required": true,
+              "unique": true
+            },
+            "unique": true,
+            "key": "tag",
+            "type": "textfield",
+            "input": true
+          },
+          {
+            "label": "Ação",
+            "widget": "choicesjs",
+            "tableView": true,
+            "data": {
+              "values": [
+                {
+                  "label": "Omitir checklist",
+                  "value": "omitChecklist"
+                },
+                {
+                  "label": "Checklist personalizado",
+                  "value": "customChecklist"
+                }
+              ]
+            },
+            "validate": {
+              "required": true
+            },
+            "key": "action",
+            "type": "select",
+            "input": true
+          },
+          {
+            "label": "ID Checklist Personalizado",
+            "tableView": true,
+            "validate": {
+              "required": true,
+              "custom": "valid = /^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$/.test(input) ? true : 'ID inválido';"
+            },
+            "key": "customChecklistId",
+            "conditional": {
+              "show": true,
+              "when": "specialTags.action",
+              "eq": "customChecklist"
+            },
+            "type": "textfield",
+            "input": true
+          }
+        ]
+      },
+      {
         "type": "button",
-        "label": "Submit",
+        "label": "Enviar",
         "key": "submit",
         "disableOnInvalid": true,
         "input": true,
