@@ -54,18 +54,18 @@ messages.on('onLogin', function(l) {
     // check if user has returned
     if (lastLogin === l && dateDiffHours < config.returnHours) {
       platform.log('user has returned');
-      return config.returnId;
+      return env.setData('RETURN_VALUE', config.returnId);
     }
   }
 
   if (lastLogin === l && dateDiffHours < config.checklistHours) {
     platform.log('user has logged in before and is not overdue, skipping checklist');
-    return;
+    return env.setData('RETURN_VALUE', '');
   }
 
   if (lastLogin !== l && config.checklistId) {
     // we'll continue logic on onSubmit
-    return config.checklistId;
+    return env.setData('RETURN_VALUE', config.checklistId);
   }
 
   // TODO:
@@ -81,7 +81,7 @@ messages.on('onLogin', function(l) {
   //   return;
   // }
 
-  return config.checklistId;
+  return env.setData('RETURN_VALUE', config.checklistId);
 });
 
 messages.on('onSubmit', (subm, taskId, formId) => {
