@@ -107,7 +107,7 @@
             "label": "Output para bloqueio",
             "widget": "choicesjs",
             "tableView": true,
-            "defaultValue": "relay1",
+            "defaultValue": "MONOFLOW_RELAY_1",
             "data": {
               "values": [
                 {
