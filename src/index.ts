@@ -44,7 +44,7 @@ messages.on('onLogin', function(l) {
   // store new login date
   set(LAST_LOGIN_AT_KEY, (new Date()).toISOString());
 
-  getFrotaDoc().set('currentLogin', l);
+  getFrotaDoc()?.set('currentLogin', l);
   env.project?.saveEvent(new SessionEvent('start', l));
 
   // get settings
@@ -94,6 +94,6 @@ messages.on('onSubmit', (subm, taskId, formId) => {
 
 messages.on('onLogout', (l) => {
   env.setData('LOGIN', '');
-  getFrotaDoc().set('currentLogin', '');
+  getFrotaDoc()?.set('currentLogin', '');
   env.project?.saveEvent(new SessionEvent('end', l));
 })

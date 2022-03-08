@@ -1,4 +1,4 @@
-import type { StoreBasicValueT } from "@fermuch/telematree";
+import type { StoreBasicValueT, CollectionDoc } from "@fermuch/telematree";
 
 export function myID(): string {
   return 'id' in platform ?
@@ -62,7 +62,8 @@ export interface FrotaCollection {
   [key: string]: StoreBasicValueT;
 }
 
-export function getFrotaDoc() {
-  const col = env.project?.collectionsManager.ensureExists<FrotaCollection>("frota");
+export function getFrotaDoc(): CollectionDoc<FrotaCollection> | null {
+  const col = env.project?.collectionsManager?.ensureExists<FrotaCollection>?.("frota");
+  if (!col) return null;
   return col.get(myID());
 }
