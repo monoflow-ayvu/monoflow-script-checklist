@@ -141,10 +141,13 @@ messages.on('onShowSubmit', (taskId, formId) => {
     checklistUnlockTimer = null;
   }
 
-  checklistUnlockTimer = setTimeout(() => {
-    platform.log('form not completed on time, locking checklist');
-    lock(true);
-  })
+  const conf = getConfig();
+  if (conf.enableLock) {
+    checklistUnlockTimer = setTimeout(() => {
+      platform.log('form not completed on time, locking checklist');
+      lock(true);
+    }, conf.lockChecklistTime * 60 * 1000);
+  }
 })
 
 messages.on('onSubmit', (subm, taskId, formId) => {
