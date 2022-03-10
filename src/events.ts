@@ -1,5 +1,5 @@
+import { myID } from "@fermuch/monoutils";
 import { BaseEvent } from "@fermuch/telematree/src/events";
-import { myID } from "./utils";
 
 export class SessionEvent extends BaseEvent {
   kind = 'session';
