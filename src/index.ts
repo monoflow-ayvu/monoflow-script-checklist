@@ -7,49 +7,41 @@ const LAST_LOGIN_KEY = 'LAST_LOGIN' as const;
 const LAST_LOGIN_AT_KEY = 'LAST_LOGIN_AT' as const;
 
 type ReturnConfig = {
-  enableReturn: true;
+  enableReturn: boolean;
   returnId: string;
   returnHours: number;
-} | {
-  enableReturn: false;
-}
+};
 
 type LockConfig = {
-  enableLock: true;
+  enableLock: boolean;
   lockOutput: 'MONOFLOW_RELAY_1' | 'MONOFLOW_RELAY_2' | 'MONOFLOW_BUZ_1';
   lockChecklistTime: number;
-} | {
-  enableLock: false;
-}
+};
 
 type SpecialTag = {
   tag: string;
-  action: "customChecklist";
+  action: "customChecklist" | "omitChecklist";
   customChecklistId: string;
-} | {
-  tag: string;
-  action: "omitChecklist";
-}
+};
 
 type SpecialTagsConfig = {
-  enableSpecialTags: true;
+  enableSpecialTags: boolean;
   specialTags: SpecialTag[];
-} | {
-  enableSpecialTags: false;
-}
+};
 
 type Config = ReturnConfig & LockConfig & SpecialTagsConfig & {
   checklistId: string;
   checklistHours: number;
 }
 
+const conf = new MonoUtils.config.Config<Config>();
+
 function lock(doLock = true) {
-  const conf = MonoUtils.config.getConfig<Config>();
-  if (!conf.enableLock) {
+  if (!conf.get('enableLock', false)) {
     return;
   }
 
-  env.setData(conf.lockOutput, doLock);
+  env.setData(conf.get('lockOutput', 'MONOFLOW_RELAY_1'), doLock);
 }
 
 messages.on('onInit', function() {
@@ -69,12 +61,9 @@ messages.on('onLogin', function(l) {
   MonoUtils.collections.getFrotaDoc()?.set('currentLogin', l);
   env.project?.saveEvent(new SessionEvent('start', l));
 
-  // get settings
-  const config = MonoUtils.config.getConfig<Config>();
-
   const login = env.project?.logins.find((ll) => ll.key === l);
-  if (login && config.enableSpecialTags) {
-    for (const tag of config.specialTags) {
+  if (login && conf.get('enableSpecialTags', false)) {
+    for (const tag of conf.get('specialTags', [])) {
       if (login.tags.includes(tag.tag)) {
         if (tag.action === 'customChecklist') {
           lock(false);
@@ -87,16 +76,16 @@ messages.on('onLogin', function(l) {
     }
   }
 
-  if (config.enableReturn) {
+  if (conf.get('enableReturn', false)) {
     // check if user has returned
-    if (lastLogin === l && dateDiffHours < config.returnHours) {
+    if (lastLogin === l && dateDiffHours < conf.get('returnHours', 0)) {
       platform.log('user has returned');
       lock(false);
-      return env.setData('RETURN_VALUE', config.returnId);
+      return env.setData('RETURN_VALUE', conf.get('returnId', ''));
     }
   }
 
-  if (lastLogin === l && dateDiffHours < config.checklistHours) {
+  if (lastLogin === l && dateDiffHours < conf.get('checklistHours', 0)) {
     platform.log('user has logged in before and is not overdue, skipping checklist');
     lock(false);
     return env.setData('RETURN_VALUE', '');
@@ -104,7 +93,7 @@ messages.on('onLogin', function(l) {
 
   // we'll continue logic for locks on onSubmit
   lock(false);
-  return env.setData('RETURN_VALUE', config.checklistId);
+  return env.setData('RETURN_VALUE', conf.get('checklistId', ''));
 });
 
 messages.on('onShowSubmit', (taskId, formId) => {
@@ -113,17 +102,16 @@ messages.on('onShowSubmit', (taskId, formId) => {
     checklistUnlockTimer = null;
   }
 
-  const conf = MonoUtils.config.getConfig<Config>();
-  if (conf.enableLock) {
+  if (conf.get('enableLock', false)) {
     checklistUnlockTimer = setTimeout(() => {
       platform.log('form not completed on time, locking checklist');
       lock(true);
-    }, conf.lockChecklistTime * 60 * 1000);
+    }, conf.get('lockChecklistTime', 0) * 60 * 1000);
   }
 })
 
 messages.on('onSubmit', (subm, taskId, formId) => {
-  if (formId !== MonoUtils.config.get<Config, 'checklistId'>('checklistId', '')) {
+  if (formId !== conf.get('checklistId', '')) {
     return;
   }
 
