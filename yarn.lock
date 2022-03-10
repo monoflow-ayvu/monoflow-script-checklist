@@ -1099,19 +1099,19 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.3.tgz#90420f9f9c6d3987f176a19a7d8e764271a2f55d"
   integrity sha512-Fxt+AfXgjMoin2maPIYzFZnQjAXjAL0PHscM5pRTtatFqB+vZxAM9tLp2Optnuw3QOQC40jTNeGYFOMvyf7v9g==
 
-"@fermuch/monoutils@^0.0.18":
-  version "0.0.18"
-  resolved "https://registry.yarnpkg.com/@fermuch/monoutils/-/monoutils-0.0.18.tgz#e3ff5048baa17d59aece2c2dad06f5e904b4bac9"
-  integrity sha512-0lt0eiYpaC38UpBhUk9uXy+eUQaOdoW92XJJs+tTq4hYKlST/GB2ZNTMVL/TvFvODilPRibK/dYJDpRDmLXLqw==
+"@fermuch/monoutils@^0.0.22":
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/@fermuch/monoutils/-/monoutils-0.0.22.tgz#a6af48e4453c6b3a3e87d8eb01cd83edd7f9e3ea"
+  integrity sha512-31YW7RzD4ZiTpmTBC8FL+f8Y9BuVZFHZA8jDdOmqhBN0hNTr/HPuDTpxIx2n8ErVjWD3LkxlAl16cENeb3l9fg==
   dependencies:
-    "@fermuch/telematree" "^9.15.0"
+    "@fermuch/telematree" "^9.16.0"
     lodash "^4.17.21"
     typed-emitter "^2.1.0"
 
-"@fermuch/telematree@9.15.0", "@fermuch/telematree@^9.15.0":
-  version "9.15.0"
-  resolved "https://registry.yarnpkg.com/@fermuch/telematree/-/telematree-9.15.0.tgz#3e9b00e33bc6817f33e0b2dc3b76edf8a7394063"
-  integrity sha512-IlOHCBTLB3pMq86ihOZnj69BRWgfc7v0O4kt1FyNW5bONE2hAsmACxf6C+o45BsHmCz1kyRtAO8sLlof2IaImQ==
+"@fermuch/telematree@^9.16.0":
+  version "9.16.0"
+  resolved "https://registry.yarnpkg.com/@fermuch/telematree/-/telematree-9.16.0.tgz#c751aab5beff4a124024d86afe6c0ee6e2530037"
+  integrity sha512-kXqUAZp0ISshfWwnF/v5+ojyW+9hXZZfw7CjFtRbyVGZ/clUgwV2M8jUGGux5ZdZ+CDD0Z1Lejs6u68pqPxjTQ==
   dependencies:
     "@stablelib/snappy" "^1.0.1"
     eta "^1.12.3"
