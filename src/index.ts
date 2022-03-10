@@ -1,5 +1,6 @@
 import { SessionEvent } from "./events";
-import { currentLogin, getFrotaDoc, getString, set } from "./utils";
+// import { currentLogin, getFrotaDoc, getString, set } from "./utils";
+import MonoUtils from "@fermuch/monoutils";
 
 let checklistUnlockTimer: NodeJS.Timeout | null = null;
 const LAST_LOGIN_KEY = 'LAST_LOGIN' as const;
@@ -42,29 +43,13 @@ type Config = ReturnConfig & LockConfig & SpecialTagsConfig & {
   checklistHours: number;
 }
 
-function getConfig(): Config {
-  const conf = getSettings?.() as Config;
-  if (!conf) {
-    return {
-      enableReturn: false,
-      enableLock: false,
-      enableSpecialTags: false,
-      checklistHours: 8,
-      checklistId: '',
-    }
-  }
-
-  return conf;
-}
-
 function lock(doLock = true) {
-  const conf = getConfig();
+  const conf = MonoUtils.config.getConfig<Config>();
   if (!conf.enableLock) {
     return;
   }
 
-  const lockOutput = conf.lockOutput || 'MONOFLOW_RELAY_1';
-  env.setData(lockOutput, doLock);
+  env.setData(conf.lockOutput, doLock);
 }
 
 messages.on('onInit', function() {
@@ -74,18 +59,18 @@ messages.on('onInit', function() {
 messages.on('onLogin', function(l) {
   platform.log('executing login logic');
 
-  const lastLoginAt = new Date(getString(LAST_LOGIN_AT_KEY) || 0);
+  const lastLoginAt = new Date(MonoUtils.storage.getString(LAST_LOGIN_AT_KEY) || 0);
   const dateDiffHours = Math.abs((new Date()).getTime() - lastLoginAt.getTime()) / 36e5;
-  const lastLogin = getString(LAST_LOGIN_KEY);
+  const lastLogin = MonoUtils.storage.getString(LAST_LOGIN_KEY);
 
   // store new login date
-  set(LAST_LOGIN_AT_KEY, (new Date()).toISOString());
+  MonoUtils.storage.set(LAST_LOGIN_AT_KEY, (new Date()).toISOString());
 
-  getFrotaDoc()?.set('currentLogin', l);
+  MonoUtils.collections.getFrotaDoc()?.set('currentLogin', l);
   env.project?.saveEvent(new SessionEvent('start', l));
 
   // get settings
-  const config = getConfig();
+  const config = MonoUtils.config.getConfig<Config>();
 
   const login = env.project?.logins.find((ll) => ll.key === l);
   if (login && config.enableSpecialTags) {
@@ -101,19 +86,6 @@ messages.on('onLogin', function(l) {
       }
     }
   }
-
-  // TODO:
-  // const login = env.project?.logins.find((ll) => ll.key === l);
-  // if (login && (login.tags || []).includes('mecanico')) {
-  //   platform.log('mostrando checklist de mecánico');
-  //   return CHECKLIST_MECHANIC_FORM_ID;
-  // }
-
-  // TODO:
-  // if (login && (login.tags || []).includes('abastecedor')) {
-  //   platform.log('omitiendo checklist por abastecedor');
-  //   return;
-  // }
 
   if (config.enableReturn) {
     // check if user has returned
@@ -141,7 +113,7 @@ messages.on('onShowSubmit', (taskId, formId) => {
     checklistUnlockTimer = null;
   }
 
-  const conf = getConfig();
+  const conf = MonoUtils.config.getConfig<Config>();
   if (conf.enableLock) {
     checklistUnlockTimer = setTimeout(() => {
       platform.log('form not completed on time, locking checklist');
@@ -151,7 +123,7 @@ messages.on('onShowSubmit', (taskId, formId) => {
 })
 
 messages.on('onSubmit', (subm, taskId, formId) => {
-  if (formId !== getConfig().checklistId) {
+  if (formId !== MonoUtils.config.get<Config, 'checklistId'>('checklistId', '')) {
     return;
   }
 
@@ -160,13 +132,13 @@ messages.on('onSubmit', (subm, taskId, formId) => {
     checklistUnlockTimer = null;
   }
   lock(false);
-  set(LAST_LOGIN_KEY, currentLogin());
+  MonoUtils.storage.set(LAST_LOGIN_KEY, MonoUtils.currentLogin());
 })
 
 messages.on('onLogout', (l) => {
   lock(true);
   env.setData('LOGIN', '');
-  getFrotaDoc()?.set('currentLogin', '');
+  MonoUtils.collections.getFrotaDoc()?.set('currentLogin', '');
   env.project?.saveEvent(new SessionEvent('end', l));
 })
 
