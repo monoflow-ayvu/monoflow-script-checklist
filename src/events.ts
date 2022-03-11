@@ -1,4 +1,5 @@
-import { default as MonoUtils, myID } from "@fermuch/monoutils";
+import * as MonoUtils from "@fermuch/monoutils";
+import { myID } from "@fermuch/monoutils";
 
 export class SessionEvent extends MonoUtils.wk.event.BaseEvent {
   kind = 'session';

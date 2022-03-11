@@ -1,4 +1,4 @@
-import MonoUtils from "@fermuch/monoutils";
+import * as MonoUtils from "@fermuch/monoutils";
 import { SessionEvent } from "./events";
 import { conf } from './config';
 

@@ -1099,13 +1099,12 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.3.tgz#90420f9f9c6d3987f176a19a7d8e764271a2f55d"
   integrity sha512-Fxt+AfXgjMoin2maPIYzFZnQjAXjAL0PHscM5pRTtatFqB+vZxAM9tLp2Optnuw3QOQC40jTNeGYFOMvyf7v9g==
 
-"@fermuch/monoutils@^0.0.25":
-  version "0.0.25"
-  resolved "https://registry.yarnpkg.com/@fermuch/monoutils/-/monoutils-0.0.25.tgz#f4e083e9ed843162f55c997f9833f200ef7e9d97"
-  integrity sha512-5SSaOnJyVbjKTQE+yRaWffhIcOhKqLEnRIenn8lhUudXFaxfWZKEDDiGgbb6cg6doBNu8Baf7CnKyshUD1T03g==
+"@fermuch/monoutils@^0.0.30":
+  version "0.0.30"
+  resolved "https://registry.yarnpkg.com/@fermuch/monoutils/-/monoutils-0.0.30.tgz#6482ae5a841b8716da486bb89cffc1cc8adf903a"
+  integrity sha512-8epFNBXOEazHmcaBEIZghrjRxN+p8EwkGdvJlibbeO65KChVTt3jXHGe6ZCPWu+K70O3QRRb3QaTpHbUHgeLdA==
   dependencies:
     "@fermuch/telematree" "^9.16.0"
-    lodash "^4.17.21"
     typed-emitter "^2.1.0"
 
 "@fermuch/telematree@^9.16.0":
