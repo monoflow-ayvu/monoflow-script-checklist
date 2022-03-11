@@ -36,13 +36,13 @@ type Config = ReturnConfig & LockConfig & SpecialTagsConfig & {
 
 const conf = new MonoUtils.config.Config<Config>();
 
-function lock(doLock = true) {
-  if (!conf.get('enableLock', false)) {
-    return;
-  }
+// function lock(doLock = true) {
+//   if (!conf.get('enableLock', false)) {
+//     return;
+//   }
 
-  env.setData(conf.get('lockOutput', 'MONOFLOW_RELAY_1'), doLock);
-}
+//   env.setData(conf.get('lockOutput', 'MONOFLOW_RELAY_1'), doLock);
+// }
 
 messages.on('onInit', function() {
   platform.log('Checklist plugin initialized');
@@ -66,10 +66,10 @@ messages.on('onLogin', function(l) {
     for (const tag of conf.get('specialTags', [])) {
       if (login.tags.includes(tag.tag)) {
         if (tag.action === 'customChecklist') {
-          lock(false);
+          MonoUtils.wk.lock.unlock();
           return env.setData('RETURN_VALUE', tag.customChecklistId);
         } else if (tag.action === 'omitChecklist') {
-          lock(false);
+          MonoUtils.wk.lock.unlock();
           return env.setData('RETURN_VALUE', '');
         }
       }
@@ -80,19 +80,19 @@ messages.on('onLogin', function(l) {
     // check if user has returned
     if (lastLogin === l && dateDiffHours < conf.get('returnHours', 0)) {
       platform.log('user has returned');
-      lock(false);
+      MonoUtils.wk.lock.unlock();
       return env.setData('RETURN_VALUE', conf.get('returnId', ''));
     }
   }
 
   if (lastLogin === l && dateDiffHours < conf.get('checklistHours', 0)) {
     platform.log('user has logged in before and is not overdue, skipping checklist');
-    lock(false);
+    MonoUtils.wk.lock.unlock();
     return env.setData('RETURN_VALUE', '');
   }
 
   // we'll continue logic for locks on onSubmit
-  lock(false);
+  MonoUtils.wk.lock.unlock();
   return env.setData('RETURN_VALUE', conf.get('checklistId', ''));
 });
 
@@ -105,7 +105,7 @@ messages.on('onShowSubmit', (taskId, formId) => {
   if (conf.get('enableLock', false)) {
     checklistUnlockTimer = setTimeout(() => {
       platform.log('form not completed on time, locking checklist');
-      lock(true);
+      MonoUtils.wk.lock.lock();
     }, conf.get('lockChecklistTime', 0) * 60 * 1000);
   }
 })
@@ -119,12 +119,12 @@ messages.on('onSubmit', (subm, taskId, formId) => {
     clearTimeout(checklistUnlockTimer);
     checklistUnlockTimer = null;
   }
-  lock(false);
+  MonoUtils.wk.lock.unlock();
   MonoUtils.storage.set(LAST_LOGIN_KEY, MonoUtils.currentLogin());
 })
 
 messages.on('onLogout', (l) => {
-  lock(true);
+  MonoUtils.wk.lock.lock();
   env.setData('LOGIN', '');
   MonoUtils.collections.getFrotaDoc()?.set('currentLogin', '');
   env.project?.saveEvent(new SessionEvent('end', l));
