@@ -40,7 +40,6 @@ const conf = new MonoUtils.config.Config<Config>();
 //   if (!conf.get('enableLock', false)) {
 //     return;
 //   }
-
 //   env.setData(conf.get('lockOutput', 'MONOFLOW_RELAY_1'), doLock);
 // }
 
