@@ -1,7 +1,6 @@
-import { myID } from "@fermuch/monoutils";
-import { BaseEvent } from "@fermuch/telematree/src/events";
+import { default as MonoUtils, myID } from "@fermuch/monoutils";
 
-export class SessionEvent extends BaseEvent {
+export class SessionEvent extends MonoUtils.wk.event.BaseEvent {
   kind = 'session';
   type: 'start' | 'end';
   userId: string;

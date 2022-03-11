@@ -1,47 +1,10 @@
-import { SessionEvent } from "./events";
-// import { currentLogin, getFrotaDoc, getString, set } from "./utils";
 import MonoUtils from "@fermuch/monoutils";
+import { SessionEvent } from "./events";
+import { conf } from './config';
 
 let checklistUnlockTimer: NodeJS.Timeout | null = null;
 const LAST_LOGIN_KEY = 'LAST_LOGIN' as const;
 const LAST_LOGIN_AT_KEY = 'LAST_LOGIN_AT' as const;
-
-type ReturnConfig = {
-  enableReturn: boolean;
-  returnId: string;
-  returnHours: number;
-};
-
-type LockConfig = {
-  enableLock: boolean;
-  lockOutput: 'MONOFLOW_RELAY_1' | 'MONOFLOW_RELAY_2' | 'MONOFLOW_BUZ_1';
-  lockChecklistTime: number;
-};
-
-type SpecialTag = {
-  tag: string;
-  action: "customChecklist" | "omitChecklist";
-  customChecklistId: string;
-};
-
-type SpecialTagsConfig = {
-  enableSpecialTags: boolean;
-  specialTags: SpecialTag[];
-};
-
-type Config = ReturnConfig & LockConfig & SpecialTagsConfig & {
-  checklistId: string;
-  checklistHours: number;
-}
-
-const conf = new MonoUtils.config.Config<Config>();
-
-// function lock(doLock = true) {
-//   if (!conf.get('enableLock', false)) {
-//     return;
-//   }
-//   env.setData(conf.get('lockOutput', 'MONOFLOW_RELAY_1'), doLock);
-// }
 
 messages.on('onInit', function() {
   platform.log('Checklist plugin initialized');
