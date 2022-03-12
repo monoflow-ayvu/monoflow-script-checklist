@@ -82,7 +82,28 @@ messages.on('onSubmit', (subm, taskId, formId) => {
     clearTimeout(checklistUnlockTimer);
     checklistUnlockTimer = null;
   }
-  MonoUtils.wk.lock.unlock();
+
+  // process checklist questions actions
+  let keepLocked = false;
+  if (conf.get('checklistQuestionsEnabled', false)) {
+    for (const question of conf.get('checklistQuestions', [])) {
+      if (subm.data[question.question] === question.answer) {
+        switch(question.action) {
+          case 'keepLocked':
+            keepLocked = true;
+            break;
+        }
+      }
+    }
+  }
+
+  if (keepLocked) {
+    platform.log('an action was triggered to keep locked after checklist');
+    MonoUtils.wk.lock.lock();
+  } else {
+    platform.log('unlocking after checklist completed correctly');
+    MonoUtils.wk.lock.unlock();
+  }
   MonoUtils.storage.set(LAST_LOGIN_KEY, MonoUtils.currentLogin());
 })
 
