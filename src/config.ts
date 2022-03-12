@@ -23,9 +23,25 @@ type SpecialTagsConfig = {
   specialTags: SpecialTag[];
 };
 
-type Config = ReturnConfig & LockConfig & SpecialTagsConfig & {
-  checklistId: string;
-  checklistHours: number;
+type ChecklistQuestion = {
+  question: string;
+  answer: string;
+  action: 'keepLocked';
 }
+
+type ChecklistQuestionsConfig = {
+  checklistQuestionsEnabled: boolean;
+  checklistQuestions: ChecklistQuestion[];
+};
+
+type Config =
+  ReturnConfig
+  & LockConfig
+  & SpecialTagsConfig
+  & ChecklistQuestionsConfig
+  & {
+    checklistId: string;
+    checklistHours: number;
+  };
 
 export const conf = new MonoUtils.config.Config<Config>();

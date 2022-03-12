@@ -232,6 +232,72 @@
         ]
       },
       {
+        "label": "Habilitar bloqueio baseado no checklist?",
+        "tableView": false,
+        "key": "checklistQuestionsEnabled",
+        "type": "checkbox",
+        "input": true,
+        "defaultValue": false
+      },
+      {
+        "label": "Perguntas do checklist",
+        "reorder": false,
+        "addAnotherPosition": "bottom",
+        "layoutFixed": false,
+        "enableRowGroups": false,
+        "initEmpty": false,
+        "tableView": false,
+        "defaultValue": [
+          {}
+        ],
+        "key": "checklistQuestions",
+        "conditional": {
+          "show": true,
+          "when": "checklistQuestionsEnabled",
+          "eq": "true"
+        },
+        "type": "datagrid",
+        "input": true,
+        "components": [
+          {
+            "label": "Pergunta (API)",
+            "tableView": true,
+            "validate": {
+              "required": true
+            },
+            "key": "question",
+            "type": "textfield",
+            "input": true
+          },
+          {
+            "label": "Resposta",
+            "tableView": true,
+            "validate": {
+              "required": true
+            },
+            "key": "answer",
+            "type": "textfield",
+            "input": true
+          },
+          {
+            "label": "Acção",
+            "widget": "choicesjs",
+            "tableView": true,
+            "data": {
+              "values": [
+                {
+                  "label": "Não desbloquear",
+                  "value": "keepLocked"
+                }
+              ]
+            },
+            "key": "action",
+            "type": "select",
+            "input": true
+          }
+        ]
+      },
+      {
         "type": "button",
         "label": "Enviar",
         "key": "submit",
