@@ -203,6 +203,10 @@
                 {
                   "label": "Checklist personalizado",
                   "value": "customChecklist"
+                },
+                {
+                  "label": "Supervisor",
+                  "value": "supervisor"
                 }
               ]
             },
@@ -291,6 +295,9 @@
                 {
                   "label": "Não desbloquear",
                   "value": "keepLocked"
+                }, {
+                  "label": "Crítico",
+                  "value": "critical"
                 }
               ]
             },

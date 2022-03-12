@@ -14,7 +14,7 @@ type LockConfig = {
 
 type SpecialTag = {
   tag: string;
-  action: "customChecklist" | "omitChecklist";
+  action: "customChecklist" | "omitChecklist" | "supervisor";
   customChecklistId: string;
 };
 
@@ -26,7 +26,7 @@ type SpecialTagsConfig = {
 type ChecklistQuestion = {
   question: string;
   answer: string;
-  action: 'keepLocked';
+  action: 'keepLocked' | 'critical';
 }
 
 type ChecklistQuestionsConfig = {

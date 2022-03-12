@@ -5,9 +5,14 @@ import { conf } from './config';
 let checklistUnlockTimer: NodeJS.Timeout | null = null;
 const LAST_LOGIN_KEY = 'LAST_LOGIN' as const;
 const LAST_LOGIN_AT_KEY = 'LAST_LOGIN_AT' as const;
+const IS_DEVICE_LOCKED_KEY = 'IS_DEVICE_LOCKED' as const;
+
+function isDeviceLocked() {
+  return MonoUtils.storage.getBoolean(IS_DEVICE_LOCKED_KEY) === true;
+}
 
 messages.on('onInit', function() {
-  platform.log('Checklist plugin initialized');
+  platform.log('Checklist plugin initialized...' + isDeviceLocked() ? ' Device is locked!' : '');
 });
 
 messages.on('onLogin', function(l) {
@@ -16,12 +21,27 @@ messages.on('onLogin', function(l) {
   const lastLoginAt = new Date(MonoUtils.storage.getString(LAST_LOGIN_AT_KEY) || 0);
   const dateDiffHours = Math.abs((new Date()).getTime() - lastLoginAt.getTime()) / 36e5;
   const lastLogin = MonoUtils.storage.getString(LAST_LOGIN_KEY);
+  const userTags = env.project?.logins?.find((login) => login.key === lastLogin)?.tags || [];
+  const specialTags = conf.get('specialTags');
+  const supervisorTags = specialTags.filter((tag) => tag.action === 'supervisor');
+  const isLoginSupervisor = userTags.some((tag) => supervisorTags.some((supervisorTag) => supervisorTag.tag === tag));
+  const isLocked = isDeviceLocked();
 
-  // store new login date
+  if (isLocked && !isLoginSupervisor) {
+    platform.log('Device is locked, but user is not a supervisor');
+    return env.setData('RETURN_VALUE', {error: 'Supervisor requerido.'});
+  }
+
+  // update metadata
   MonoUtils.storage.set(LAST_LOGIN_AT_KEY, (new Date()).toISOString());
-
   MonoUtils.collections.getFrotaDoc()?.set('currentLogin', l);
   env.project?.saveEvent(new SessionEvent('start', l));
+
+  if (isLocked && isLoginSupervisor) {
+    platform.log('Device is locked, but user is a supervisor. Unlocking device...');
+    MonoUtils.storage.set(IS_DEVICE_LOCKED_KEY, false);
+    return env.setData('RETURN_VALUE', '');
+  }
 
   const login = env.project?.logins.find((ll) => ll.key === l);
   if (login && conf.get('enableSpecialTags', false)) {
@@ -93,6 +113,12 @@ messages.on('onSubmit', (subm, taskId, formId) => {
           case 'keepLocked':
             keepLocked = true;
             break;
+          case 'critical':
+            platform.log('critical checklist question answered, locking device!!!');
+            MonoUtils.storage.set(IS_DEVICE_LOCKED_KEY, true);
+            MonoUtils.wk.lock.lock();
+            env.project.logout();
+            return;
         }
       }
     }
