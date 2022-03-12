@@ -1,6 +1,6 @@
 {
   "name": "checklist",
-  "version": "0.19.0",
+  "version": "0.20.0",
   "description": "Comprobador de checklist. Pode controlar checklist, retorno ao trabalho e mais.",
   "settingsSchema": {
     "display": "form",
@@ -295,7 +295,8 @@
                 {
                   "label": "Não desbloquear",
                   "value": "keepLocked"
-                }, {
+                },
+                {
                   "label": "Crítico",
                   "value": "critical"
                 }
