@@ -283,6 +283,9 @@
             "label": "Acção",
             "widget": "choicesjs",
             "tableView": true,
+            "validate": {
+              "required": true
+            },
             "data": {
               "values": [
                 {

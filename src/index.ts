@@ -87,9 +87,7 @@ messages.on('onSubmit', (subm, taskId, formId) => {
   let keepLocked = false;
   if (conf.get('checklistQuestionsEnabled', false)) {
     platform.log('checking checklist questions');
-    platform.log(JSON.stringify(subm.data, undefined, 2));
     for (const question of conf.get('checklistQuestions', [])) {
-      platform.log(`checking question: ${question.question} == ${question.answer} ? ${subm.data[question.question] === question.answer} (${subm.data[question.question]}) [${question.action} | ${question.action === 'keepLocked'}]`);
       if (subm.data[question.question] === question.answer) {
         switch(question.action) {
           case 'keepLocked':
