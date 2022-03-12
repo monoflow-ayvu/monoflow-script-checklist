@@ -54,6 +54,7 @@ messages.on('onLogin', function(l) {
   }
 
   // we'll continue logic for locks on onSubmit
+  platform.log("normal login, continuing logic post-checklist");
   MonoUtils.wk.lock.unlock();
   return env.setData('RETURN_VALUE', conf.get('checklistId', ''));
 });
