@@ -27,6 +27,8 @@ messages.on('onLogin', function(l) {
   const isLoginSupervisor = userTags.some((tag) => supervisorTags.some((supervisorTag) => supervisorTag.tag === tag));
   const isLocked = isDeviceLocked();
 
+  env.setData('IS_DEVICE_LOCKED', isLocked);
+
   if (isLocked && !isLoginSupervisor) {
     platform.log('Device is locked, but user is not a supervisor');
     return env.setData('RETURN_VALUE', {error: 'Supervisor requerido.'});
