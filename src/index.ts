@@ -35,13 +35,13 @@ messages.on('onLogin', function(l) {
   }
 
   // update metadata
-  MonoUtils.storage.set(LAST_LOGIN_AT_KEY, (new Date()).toISOString());
   MonoUtils.collections.getFrotaDoc()?.set('currentLogin', l);
   env.project?.saveEvent(new SessionEvent('start', l));
 
   if (isLocked && isLoginSupervisor) {
     platform.log('Device is locked, but user is a supervisor. Unlocking device...');
     MonoUtils.storage.set(IS_DEVICE_LOCKED_KEY, false);
+    MonoUtils.storage.set(LAST_LOGIN_AT_KEY, (new Date()).toISOString());
     return env.setData('RETURN_VALUE', '');
   }
 
@@ -54,6 +54,7 @@ messages.on('onLogin', function(l) {
           return env.setData('RETURN_VALUE', tag.customChecklistId);
         } else if (tag.action === 'omitChecklist') {
           MonoUtils.wk.lock.unlock();
+          MonoUtils.storage.set(LAST_LOGIN_AT_KEY, (new Date()).toISOString());
           return env.setData('RETURN_VALUE', '');
         }
       }
@@ -65,6 +66,9 @@ messages.on('onLogin', function(l) {
     if (lastLogin === l && dateDiffHours < conf.get('returnHours', 0)) {
       platform.log('user has returned');
       MonoUtils.wk.lock.unlock();
+      if (!conf.get('returnId', '')) {
+        MonoUtils.storage.set(LAST_LOGIN_AT_KEY, (new Date()).toISOString());
+      }
       return env.setData('RETURN_VALUE', conf.get('returnId', ''));
     }
   }
@@ -78,6 +82,9 @@ messages.on('onLogin', function(l) {
   // we'll continue logic for locks on onSubmit
   platform.log("normal login, continuing logic post-checklist");
   MonoUtils.wk.lock.unlock();
+  if (!conf.get('checklistId')) {
+    MonoUtils.storage.set(LAST_LOGIN_AT_KEY, (new Date()).toISOString());
+  }
   return env.setData('RETURN_VALUE', conf.get('checklistId', ''));
 });
 
@@ -96,6 +103,13 @@ messages.on('onShowSubmit', (taskId, formId) => {
 })
 
 messages.on('onSubmit', (subm, taskId, formId) => {
+  if (
+    formId === conf.get('returnId', '')
+    || formId === conf.get('checklistId', '')
+  ) {
+    MonoUtils.storage.set(LAST_LOGIN_AT_KEY, (new Date()).toISOString());
+  }
+
   if (formId !== conf.get('checklistId', '')) {
     return;
   }
