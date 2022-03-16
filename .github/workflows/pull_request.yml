@@ -1,23 +1,17 @@
-name: CI Deploy
-on:
-  push:
-    # ignore new branches
-    branches:
-      - "!*"
-    # accept all tags starting with v
-    tags:
-      - "v*"
+name: Build PR (Standard)
+
+on: pull_request
 
 jobs:
   build:
-    name: Deploy
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    if: ${{ github.actor != 'dependabot[bot]' }}
     strategy:
       matrix:
         node-version: [14.x]
         os: [ubuntu-latest]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v1
       - name: Use Node.js ${{ matrix.node_version }}
         uses: actions/setup-node@v1
         with:
@@ -29,6 +23,3 @@ jobs:
           yarn test
         env:
           CI: true
-      - run: yarn build && node .scripts/deploy.js --force
-        env:
-          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}

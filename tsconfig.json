@@ -20,8 +20,12 @@
       "./types"
     ]
   },
+  "include": [
+    "./src",
+    "types"
+  ],
   "exclude": [
     "./node_modules/@types/node",
-    "./node_modules/@fermuch/telematree"
+    // "./node_modules/@fermuch/telematree"
   ]
 }

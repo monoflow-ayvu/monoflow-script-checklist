@@ -1,21 +1,18 @@
-name: CI Deploy
+name: CI Test
 on:
-  push:
-    # ignore new branches
-    branches:
-      - "!*"
-    # accept all tags starting with v
-    tags:
-      - "v*"
+  push: []
 
 jobs:
   build:
-    name: Deploy
+    name: Test
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x]
-        os: [ubuntu-latest]
+        node-version: [12.x, 14.x, 16.x]
+        # our developers use linux, osx and might use windows in the future
+        # so we make sure the build and test pipeline runs on every one
+        # of them
+        os: [ubuntu-latest, macos-latest, windows-2016]
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node_version }}
@@ -29,6 +26,3 @@ jobs:
           yarn test
         env:
           CI: true
-      - run: yarn build && node .scripts/deploy.js --force
-        env:
-          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
