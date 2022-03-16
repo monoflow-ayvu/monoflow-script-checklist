@@ -22,7 +22,7 @@ messages.on('onLogin', function(l) {
   const dateDiffHours = Math.abs((new Date()).getTime() - lastLoginAt.getTime()) / 36e5;
   const lastLogin = MonoUtils.storage.getString(LAST_LOGIN_KEY);
   const userTags = env.project?.logins?.find((login) => login.key === l)?.tags || [];
-  const specialTags = conf.get('specialTags');
+  const specialTags = conf.get('specialTags', []);
   const supervisorTags = specialTags.filter((tag) => tag.action === 'supervisor');
   const isLoginSupervisor = userTags.some((tag) => supervisorTags.some((supervisorTag) => supervisorTag.tag === tag));
   const isLocked = isDeviceLocked();
