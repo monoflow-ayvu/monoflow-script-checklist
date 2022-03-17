@@ -161,8 +161,36 @@ describe("onInit", () => {
       });
     });
 
-    xdescribe('special tags', () => {
-      xit('shows custom checklist for customChecklist tag', () => { });
+    describe('special tags', () => {
+      it('shows custom checklist for customChecklist tag', () => {
+        const colStore = {} as Record<any, any>;
+        const mockCol = {
+          get() {
+            return {
+              data: colStore,
+              get: (k: string) => colStore[k],
+              set: (k: string, v: any) => (colStore[k] = v),
+            }
+          }
+        };
+        (env.project as any) = {
+          collectionsManager: {
+            ensureExists: () => mockCol,
+          },
+          saveEvent: jest.fn(),
+          logins: [],
+        };
+        getSettings = () => ({
+          enableSpecialTags: true,
+          specialTags: [{tag: 'customChecklist', action: 'customChecklist', customChecklistId: 'abc123'}],
+        })
+        loadScript();
+        messages.emit('onInit');
+        messages.emit('onLogin', '123', '');
+
+        expect(colStore.currentLogin).toBe('123');
+        expect(env.data.RETURN_VALUE).toBe('abc123');
+      });
       xit('omitChecklist tag skips checklist', () => { });
       xit('always sets LAST_LOGIN_AT', () => { });
     });
