@@ -13,6 +13,7 @@ describe("onInit", () => {
   afterEach(() => {
     messages.removeAllListeners();
     MonoUtils.storage.set('IS_DEVICE_LOCKED', false);
+    MonoUtils.storage.set('LAST_LOGIN_AT', undefined);
   });
 
   it('runs without errors', () => {
@@ -26,6 +27,7 @@ describe("onInit", () => {
       messages.emit('onInit');
       messages.emit('onLogin', '123', '');
       expect(env.data.IS_DEVICE_LOCKED).toBe(false);
+      expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBeTruthy();
     });
     
     it('onLogin does not go through if device is locked', () => {
@@ -34,6 +36,7 @@ describe("onInit", () => {
       MonoUtils.storage.set('IS_DEVICE_LOCKED', true);
       messages.emit('onLogin', '123', '');
       expect(env.data.RETURN_VALUE).toStrictEqual({ error: 'Supervisor requerido.' });
+      expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBeTruthy();
     });
 
     it('onLogin sets currentLogin on frota doc', () => {
@@ -59,6 +62,7 @@ describe("onInit", () => {
       messages.emit('onLogin', '123', '');
 
       expect(colStore.currentLogin).toBe('123');
+      expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBeTruthy();
     });
 
     it('onLogin saves a login event', () => {
@@ -84,6 +88,7 @@ describe("onInit", () => {
       messages.emit('onLogin', '123', '');
 
       expect(env.project.saveEvent).toHaveBeenCalledTimes(1);
+      expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBeTruthy();
     });
 
     it('unlocks device so the checklist decides if we need to block or not', () => {
@@ -91,6 +96,7 @@ describe("onInit", () => {
       messages.emit('onInit');
       messages.emit('onLogin', '123', '');
       expect(env.data.IS_DEVICE_LOCKED).toBe(false);
+      expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBeTruthy();
     });
 
     describe('onLogin is a supervisor', () => {
@@ -178,7 +184,7 @@ describe("onInit", () => {
             ensureExists: () => mockCol,
           },
           saveEvent: jest.fn(),
-          logins: [],
+          logins: [{key: '123', tags: ['customChecklist']}],
         };
         getSettings = () => ({
           enableSpecialTags: true,
@@ -190,19 +196,64 @@ describe("onInit", () => {
 
         expect(colStore.currentLogin).toBe('123');
         expect(env.data.RETURN_VALUE).toBe('abc123');
+        expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBeTruthy();
       });
-      xit('omitChecklist tag skips checklist', () => { });
-      xit('always sets LAST_LOGIN_AT', () => { });
+      
+      it('omitChecklist tag skips checklist', () => {
+        const colStore = {} as Record<any, any>;
+        const mockCol = {
+          get() {
+            return {
+              data: colStore,
+              get: (k: string) => colStore[k],
+              set: (k: string, v: any) => (colStore[k] = v),
+            }
+          }
+        };
+        (env.project as any) = {
+          collectionsManager: {
+            ensureExists: () => mockCol,
+          },
+          saveEvent: jest.fn(),
+          logins: [{key: '123', tags: ['omitChecklist']}],
+        };
+        getSettings = () => ({
+          checklistId: 'asdf',
+          enableSpecialTags: true,
+          specialTags: [{tag: 'omitChecklist', action: 'omitChecklist', customChecklistId: ''}],
+        })
+        loadScript();
+        messages.emit('onInit');
+        messages.emit('onLogin', '123', '');
+
+        expect(colStore.currentLogin).toBe('123');
+        expect(env.data.RETURN_VALUE).toBe('');
+        expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBeTruthy();
+      });
     });
 
-    xdescribe('enableReturn', () => {
+    describe('enableReturn', () => {
       xit('if same user returns before time limit, passes without checklist', () => { });
-      xit('continues to the checklist for returnId', () => { });
+      xit('continues to the checklist for returnId', () => {});
     });
   });
 
-  xdescribe('onShowSubmit', () => {
-    xit('locks if more time than lockChecklistTime passes and enableLock is enabled', () => { });
+  describe('onShowSubmit', () => {
+    it('locks if more time than lockChecklistTime passes and enableLock is enabled', () => {
+      getSettings = () => ({
+        enableLock: true,
+        lockChecklistTime: 10,
+      });
+      loadScript();
+      messages.emit('onInit');
+      messages.emit('onShowSubmit');
+      
+      expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+      jest.advanceTimersByTime(3 * 60 * 1000);
+      expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+      jest.advanceTimersByTime(10 * 60 * 1000);
+      expect(MonoUtils.wk.lock.getLockState()).toBe(true);
+    });
   });
 
   xdescribe('onSubmit', () => {
