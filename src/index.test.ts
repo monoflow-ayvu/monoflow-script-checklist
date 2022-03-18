@@ -270,8 +270,6 @@ describe("onInit", () => {
         expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBeTruthy();
         expect(env.data.RETURN_VALUE).toBe('foobar123');
       });
-
-      xit('continues to the checklist for returnId', () => {});
     });
   });
 
@@ -294,25 +292,254 @@ describe("onInit", () => {
     });
   });
 
-  xdescribe('onSubmit', () => {
-    xit('sets LAST_LOGIN_AT if formId is returnId or checklistId', () => { });
-    xit('does not continue if ID is not checklistId', () => { });
-    xit('disables checklistUnlockTimer if checklist is submitted', () => { });
-    xit('unlocks the machine under normal conditions', () => { });
+  describe('onSubmit', () => {
+    it('sets LAST_LOGIN_AT if formId is returnId or checklistId', () => {
+      const colStore = {} as Record<any, any>;
+        const mockCol = {
+          get() {
+            return {
+              data: colStore,
+              get: (k: string) => colStore[k],
+              set: (k: string, v: any) => (colStore[k] = v),
+            }
+          }
+        };
+        (env.project as any) = {
+          collectionsManager: {
+            ensureExists: () => mockCol,
+          },
+          saveEvent: jest.fn(),
+          logins: [],
+        };
+        getSettings = () => ({
+          enableReturn: true,
+          returnHours: 10,
+          returnId: 'foobar123',
+          checklistId: 'asdf',
+        });
 
-    xdescribe('checklistQuestionsEnabled', () => {
-      xit('keeps locked if keepLocked is true', () => { });
-      xit('goes into critical mode if critical is true', () => { });
+        loadScript();
+        messages.emit('onInit');
+
+        MonoUtils.storage.set('LAST_LOGIN_AT', '');
+
+        expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBe('');
+        messages.emit('onSubmit', {} as never, undefined, 'foobar123');
+        expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBeTruthy();
+
+        MonoUtils.storage.set('LAST_LOGIN_AT', '');
+
+        expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBe('');
+        messages.emit('onSubmit', {} as never, undefined, 'asdf');
+        expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBeTruthy();
+
+        MonoUtils.storage.set('LAST_LOGIN_AT', '');
+
+        expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBe('');
+        messages.emit('onSubmit', {} as never, undefined, 'wololo');
+        expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBe('');
+    });
+    
+    it('does not continue if ID is not checklistId or returnId', () => {
+      const colStore = {} as Record<any, any>;
+      const mockCol = {
+        get() {
+          return {
+            data: colStore,
+            get: (k: string) => colStore[k],
+            set: (k: string, v: any) => (colStore[k] = v),
+          }
+        }
+      };
+      (env.project as any) = {
+        collectionsManager: {
+          ensureExists: () => mockCol,
+        },
+        saveEvent: jest.fn(),
+        logins: [],
+      };
+      getSettings = () => ({
+        enableReturn: true,
+        returnHours: 10,
+        returnId: 'foobar123',
+        checklistId: 'asdf',
+      });
+
+      loadScript();
+      messages.emit('onInit');
+
+      MonoUtils.storage.set('LAST_LOGIN_AT', '');
+
+      expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBe('');
+      messages.emit('onSubmit', {} as never, undefined, 'wololo');
+      expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBe('');
+    });
+    
+    it('disables checklistUnlockTimer if checklist is submitted', () => {
+      getSettings = () => ({
+        enableLock: true,
+        lockChecklistTime: 10,
+        checklistId: 'asdf',
+      });
+      loadScript();
+      messages.emit('onInit');
+      messages.emit('onShowSubmit', undefined, 'asdf');
+      messages.emit('onSubmit', undefined, undefined, 'asdf');
+      
+      expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+      jest.advanceTimersByTime(3 * 60 * 1000);
+      expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+      jest.advanceTimersByTime(100 * 60 * 1000);
+      expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+    });
+
+    it('unlocks the machine under normal conditions', () => {
+      getSettings = () => ({
+        enableLock: true,
+        lockChecklistTime: 10,
+        checklistId: 'asdf',
+      });
+      loadScript();
+      messages.emit('onInit');
+      messages.emit('onShowSubmit', undefined, 'asdf');
+      messages.emit('onSubmit', undefined, undefined, 'asdf');
+      
+      expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+    });
+
+    describe('checklistQuestionsEnabled', () => {
+      it('keeps locked if keepLocked is true', () => {
+        getSettings = () => ({
+          enableLock: true,
+          lockChecklistTime: 10,
+          checklistId: 'asdf',
+          checklistQuestionsEnabled: true,
+          checklistQuestions: [{
+            question: 'foo',
+            answer: 'bar',
+            action: 'keepLocked',
+          }]
+        });
+        loadScript();
+        messages.emit('onInit');
+        messages.emit('onShowSubmit', undefined, 'asdf');
+
+        // does NOT answer the triggering response
+        messages.emit('onSubmit', {data: {foo: 'zaz'}} as never, undefined, 'asdf');
+        expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+        
+        // DOES answer the triggering response (and should stay locked)
+        messages.emit('onSubmit', {data: {foo: 'bar'}} as never, undefined, 'asdf');
+        expect(MonoUtils.wk.lock.getLockState()).toBe(true);
+      });
+
+      it('goes into critical mode if critical is true', () => {
+        (env.project as any) = {
+          logout: jest.fn(),
+        };
+        getSettings = () => ({
+          enableLock: true,
+          lockChecklistTime: 10,
+          checklistId: 'asdf',
+          checklistQuestionsEnabled: true,
+          checklistQuestions: [{
+            question: 'foo',
+            answer: 'bar',
+            action: 'critical',
+          }]
+        });
+        loadScript();
+        messages.emit('onInit');
+        messages.emit('onShowSubmit', undefined, 'asdf');
+
+        // does NOT answer the triggering response
+        messages.emit('onSubmit', {data: {foo: 'zaz'}} as never, undefined, 'asdf');
+        expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+        expect(MonoUtils.storage.getBoolean('IS_DEVICE_LOCKED')).toBe(false);
+        expect(env.project.logout).not.toHaveBeenCalled();
+        
+        // DOES answer the triggering response (and should stay locked)
+        messages.emit('onSubmit', {data: {foo: 'bar'}} as never, undefined, 'asdf');
+        expect(MonoUtils.wk.lock.getLockState()).toBe(true);
+        expect(MonoUtils.storage.getBoolean('IS_DEVICE_LOCKED')).toBe(true);
+        expect(env.project.logout).toHaveBeenCalled();
+      });
     });
   });
 
-  xdescribe('onLogout', () => {
-    xit('unsets LOGIN env var', () => { });
-    xit('unsets currentLogin on frota doc', () => { });
-    xit('saves a logout event', () => { });
+  describe('onLogout', () => {
+    it('unsets LOGIN env var', () => {
+      getSettings = () => ({});
+      (env.project as any) = {
+        logout: jest.fn(),
+        saveEvent: jest.fn(),
+      };
+      loadScript();
+      messages.emit('onInit');
+      
+      env.data.LOGIN = '123';
+      messages.emit('onLogout', '123');
+      expect(env.data.LOGIN).toBe('');
+    });
+
+    it('unsets currentLogin on frota doc', () => {
+      getSettings = () => ({});
+      const colStore = {} as Record<any, any>;
+      const mockCol = {
+        get() {
+          return {
+            data: colStore,
+            get: (k: string) => colStore[k],
+            set: (k: string, v: any) => (colStore[k] = v),
+          }
+        }
+      };
+      (env.project as any) = {
+        collectionsManager: {
+          ensureExists: () => mockCol,
+        },
+        logout: jest.fn(),
+        saveEvent: jest.fn(),
+      };
+      loadScript();
+      messages.emit('onInit');
+
+      colStore['currentLogin'] = '123';
+      messages.emit('onLogout', '123');
+      expect(colStore['currentLogin']).toBe('');
+    });
+
+    it('saves a logout event', () => {
+      getSettings = () => ({});
+      (env.project as any) = {
+        logout: jest.fn(),
+        saveEvent: jest.fn(),
+      };
+      loadScript();
+      messages.emit('onInit');
+      
+      messages.emit('onLogout', '123');
+      expect(env.project.saveEvent).toHaveBeenCalledTimes(1);
+    });
   });
 
-  xdescribe('onEnd', () => {
-    xit('cleans checklistUnlockTimer if there is one', () => { });
+  describe('onEnd', () => {
+    it('cleans checklistUnlockTimer if there is one', () => {
+      getSettings = () => ({
+        enableLock: true,
+        lockChecklistTime: 10,
+        checklistId: 'asdf',
+      });
+      loadScript();
+      MonoUtils.wk.lock.unlock();
+
+      messages.emit('onInit');
+      messages.emit('onShowSubmit', undefined, 'asdf');
+
+      expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+      messages.emit('onEnd');
+      jest.advanceTimersByTime(100 * 60 * 1000);
+      expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+    });
   })
 });
