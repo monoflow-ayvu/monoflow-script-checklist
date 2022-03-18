@@ -14,6 +14,7 @@ describe("onInit", () => {
     messages.removeAllListeners();
     MonoUtils.storage.set('IS_DEVICE_LOCKED', false);
     MonoUtils.storage.set('LAST_LOGIN_AT', undefined);
+    MonoUtils.storage.set('LAST_LOGIN', undefined);
   });
 
   it('runs without errors', () => {
@@ -233,7 +234,43 @@ describe("onInit", () => {
     });
 
     describe('enableReturn', () => {
-      xit('if same user returns before time limit, passes without checklist', () => { });
+      it('if same user returns before time limit, passes without checklist', () => {
+        const colStore = {} as Record<any, any>;
+        const mockCol = {
+          get() {
+            return {
+              data: colStore,
+              get: (k: string) => colStore[k],
+              set: (k: string, v: any) => (colStore[k] = v),
+            }
+          }
+        };
+        (env.project as any) = {
+          collectionsManager: {
+            ensureExists: () => mockCol,
+          },
+          saveEvent: jest.fn(),
+          logins: [],
+        };
+        getSettings = () => ({
+          enableReturn: true,
+          returnHours: 10,
+          returnId: 'foobar123',
+          checklistId: 'asdf',
+        });
+
+        loadScript();
+        messages.emit('onInit');
+
+        MonoUtils.storage.set('LAST_LOGIN', '123');
+        MonoUtils.storage.set('LAST_LOGIN_AT', (new Date()).toISOString());
+        messages.emit('onLogin', '123', '');
+
+        expect(colStore.currentLogin).toBe('123');
+        expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBeTruthy();
+        expect(env.data.RETURN_VALUE).toBe('foobar123');
+      });
+
       xit('continues to the checklist for returnId', () => {});
     });
   });
@@ -243,15 +280,16 @@ describe("onInit", () => {
       getSettings = () => ({
         enableLock: true,
         lockChecklistTime: 10,
+        checklistId: 'asdf',
       });
       loadScript();
       messages.emit('onInit');
-      messages.emit('onShowSubmit');
+      messages.emit('onShowSubmit', undefined, 'asdf');
       
       expect(MonoUtils.wk.lock.getLockState()).toBe(false);
       jest.advanceTimersByTime(3 * 60 * 1000);
       expect(MonoUtils.wk.lock.getLockState()).toBe(false);
-      jest.advanceTimersByTime(10 * 60 * 1000);
+      jest.advanceTimersByTime(100 * 60 * 1000);
       expect(MonoUtils.wk.lock.getLockState()).toBe(true);
     });
   });

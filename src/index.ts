@@ -63,7 +63,7 @@ messages.on('onLogin', function(l) {
 
   if (conf.get('enableReturn', false)) {
     // check if user has returned
-    if (lastLogin === l && dateDiffHours < conf.get('returnHours', 0)) {
+    if (lastLogin === l && dateDiffHours <= conf.get('returnHours', 0)) {
       platform.log('user has returned');
       MonoUtils.wk.lock.unlock();
       if (!conf.get('returnId', '')) {
@@ -89,6 +89,13 @@ messages.on('onLogin', function(l) {
 });
 
 messages.on('onShowSubmit', (taskId, formId) => {
+  if (
+    formId !== conf.get('checklistId', '')
+    && formId !== conf.get('returnId', '')
+  ) {
+    return;
+  }
+
   if (checklistUnlockTimer) {
     clearTimeout(checklistUnlockTimer);
     checklistUnlockTimer = null;
@@ -110,7 +117,10 @@ messages.on('onSubmit', (subm, taskId, formId) => {
     MonoUtils.storage.set(LAST_LOGIN_AT_KEY, (new Date()).toISOString());
   }
 
-  if (formId !== conf.get('checklistId', '')) {
+  if (
+    formId !== conf.get('checklistId', '')
+    && formId !== conf.get('returnId', '')
+  ) {
     return;
   }
 
