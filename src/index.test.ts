@@ -49,6 +49,35 @@ describe("onInit", () => {
   });
 });
 
+describe('onPeriodic', () => {
+  it('locks if page is Login, no user is logged in and lock is enabled', () => {
+    getSettings = () => ({
+      enableLock: true,
+    });
+    loadScript();
+    MonoUtils.wk.lock.unlock(); // reset
+
+    expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+    messages.emit('onPeriodic');
+    expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+
+    MonoUtils.wk.lock.unlock(); // reset
+    env.setData('CURRENT_PAGE', 'Login');
+    messages.emit('onPeriodic');
+    expect(MonoUtils.wk.lock.getLockState()).toBe(true);
+
+    MonoUtils.wk.lock.unlock(); // reset
+    env.setData('CURRENT_PAGE', 'Foobar');
+    messages.emit('onPeriodic');
+    expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+
+    MonoUtils.wk.lock.unlock(); // reset
+    env.setData('CURRENT_PAGE', 'Submit');
+    messages.emit('onPeriodic');
+    expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+  });
+})
+
 describe('onLogin', () => {
   // clean listeners
   afterEach(() => {
