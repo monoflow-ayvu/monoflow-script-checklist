@@ -104,31 +104,6 @@
         "tableView": false,
         "components": [
           {
-            "label": "Output para bloqueio",
-            "widget": "choicesjs",
-            "tableView": true,
-            "defaultValue": "MONOFLOW_RELAY_1",
-            "data": {
-              "values": [
-                {
-                  "label": "Relay 1",
-                  "value": "MONOFLOW_RELAY_1"
-                },
-                {
-                  "label": "Relay 2",
-                  "value": "MONOFLOW_RELAY_2"
-                },
-                {
-                  "label": "Buzzer",
-                  "value": "MONOFLOW_BUZ_1"
-                }
-              ]
-            },
-            "key": "lockOutput",
-            "type": "select",
-            "input": true
-          },
-          {
             "label": "Minutos liberado no checklist",
             "tooltip": "Tempo (minutos) para manter a máquina liberada quando acessar ao checklist. Se demorar mais desse tempo, a máquina bloqueia novamente.",
             "mask": false,
