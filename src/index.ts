@@ -13,6 +13,15 @@ function isDeviceLocked() {
 
 messages.on('onInit', function() {
   platform.log('Checklist plugin initialized...' + isDeviceLocked() ? ' Device is locked!' : '');
+
+  if (
+    conf.get('enableLock', false)
+    && env.data.CURRENT_PAGE === 'Login'
+    && env.project?.currentLogin.maybeCurrent === undefined
+  ) {
+    platform.log('Checklist plugin: login page detected on script init, locking device...');
+    MonoUtils.wk.lock.lock();
+  }
 });
 
 messages.on('onLogin', function(l) {
