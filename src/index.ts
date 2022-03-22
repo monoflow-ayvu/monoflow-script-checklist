@@ -24,6 +24,16 @@ messages.on('onInit', function() {
   }
 });
 
+messages.on('onPeriodic', function() {
+  if (
+    conf.get('enableLock', false)
+    && env.data.CURRENT_PAGE === 'Login'
+    && env.project?.currentLogin.maybeCurrent === undefined
+  ) {
+    MonoUtils.wk.lock.lock();
+  }
+});
+
 messages.on('onLogin', function(l) {
   platform.log('executing login logic');
 
