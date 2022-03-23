@@ -22,6 +22,17 @@ describe("onInit", () => {
     messages.emit('onInit');
   });
 
+  it('unlocks if enableUnlockHack is true and enableLock is false', () => {
+    getSettings = () => ({
+      enableLock: false,
+      enableUnlockHack: true,
+    })
+
+    loadScript();
+    messages.emit('onInit');
+    expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+  })
+
   it('locks if page is Login, no user is logged in and lock is enabled', () => {
     getSettings = () => ({
       enableLock: true,

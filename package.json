@@ -92,6 +92,20 @@
         "defaultValue": false
       },
       {
+        "label": "HACK: Habilitar desbloqueio total?",
+        "tooltip": "Hack para desbloquear as máquinas ao deshabilitar o bloqueio",
+        "tableView": false,
+        "key": "enableUnlockHack",
+        "type": "checkbox",
+        "conditional": {
+          "show": true,
+          "when": "enableLock",
+          "eq": "false"
+        },
+        "input": true,
+        "defaultValue": false
+      },
+      {
         "label": "Bloqueio",
         "key": "bloqueio",
         "conditional": {

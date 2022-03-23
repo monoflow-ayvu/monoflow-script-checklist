@@ -26,6 +26,14 @@ messages.on('onInit', function() {
 
 messages.on('onPeriodic', function() {
   if (
+    conf.get('enableUnlockHack', false)
+    && conf.get('enableLock', false) === false
+  ) {
+    MonoUtils.wk.lock.unlock();
+    return;
+  }
+
+  if (
     conf.get('enableLock', false)
     && env.data.CURRENT_PAGE === 'Login'
     && env.project?.currentLogin?.maybeCurrent === undefined
