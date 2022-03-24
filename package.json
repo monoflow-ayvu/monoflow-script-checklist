@@ -313,6 +313,7 @@
               "eq": "hourmeter"
             },
             "key": "checklistTarget",
+            "defaultValue": "hourmeter",
             "type": "textfield",
             "input": true
           }
