@@ -206,6 +206,10 @@ describe('onLogin', () => {
       expect(MonoUtils.storage.getBoolean('IS_DEVICE_LOCKED')).toBe(false);
       expect(env.data.RETURN_VALUE).toBe('');
       expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBeTruthy();
+      const eventCall = (env.project.saveEvent as jest.Mock).mock.calls.find((e) => e[0].kind === 'critical-lock')[0];
+      expect(eventCall.kind).toBe('critical-lock');
+      expect(eventCall.getData().locked).toBe(false);
+      expect(eventCall.getData().unlocked).toBe(true);
     });
 
     it('onLogin passes without checklist if device is unlocked by supervisor', () => {
@@ -527,6 +531,7 @@ describe('onSubmit', () => {
     it('goes into critical mode if critical is true', () => {
       (env.project as any) = {
         logout: jest.fn(),
+        saveEvent: jest.fn(),
       };
       getSettings = () => ({
         enableLock: true,
@@ -548,12 +553,18 @@ describe('onSubmit', () => {
       expect(MonoUtils.wk.lock.getLockState()).toBe(false);
       expect(MonoUtils.storage.getBoolean('IS_DEVICE_LOCKED')).toBe(false);
       expect(env.project.logout).not.toHaveBeenCalled();
+      expect(env.project.saveEvent).not.toHaveBeenCalled();
 
       // DOES answer the triggering response (and should stay locked)
       messages.emit('onSubmit', { data: { foo: 'bar' } } as never, undefined, 'asdf');
       expect(MonoUtils.wk.lock.getLockState()).toBe(true);
       expect(MonoUtils.storage.getBoolean('IS_DEVICE_LOCKED')).toBe(true);
       expect(env.project.logout).toHaveBeenCalled();
+      expect(env.project.saveEvent).toHaveBeenCalled();
+      const eventCall = (env.project.saveEvent as jest.Mock).mock.calls[0][0];
+      expect(eventCall.kind).toBe('critical-lock');
+      expect(eventCall.getData().locked).toBe(true);
+      expect(eventCall.getData().unlocked).toBe(false);
     });
   });
 });

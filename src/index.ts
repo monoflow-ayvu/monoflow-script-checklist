@@ -7,6 +7,22 @@ const LAST_LOGIN_KEY = 'LAST_LOGIN' as const;
 const LAST_LOGIN_AT_KEY = 'LAST_LOGIN_AT' as const;
 const IS_DEVICE_LOCKED_KEY = 'IS_DEVICE_LOCKED' as const;
 
+class LockEvent extends MonoUtils.wk.event.BaseEvent {
+  kind = 'critical-lock' as const;
+
+  constructor(public readonly isLocked: boolean) {
+    super();
+  }
+
+  getData() {
+    return {
+      locked: this.isLocked,
+      unlocked: !this.isLocked,
+      isLocked: this.isLocked,
+    };
+  }
+}
+
 function isDeviceLocked() {
   return MonoUtils.storage.getBoolean(IS_DEVICE_LOCKED_KEY) === true;
 }
@@ -69,6 +85,7 @@ messages.on('onLogin', function(l) {
     platform.log('Device is locked, but user is a supervisor. Unlocking device...');
     MonoUtils.storage.set(IS_DEVICE_LOCKED_KEY, false);
     MonoUtils.storage.set(LAST_LOGIN_AT_KEY, (new Date()).toISOString());
+    env.project.saveEvent(new LockEvent(false));
     return env.setData('RETURN_VALUE', '');
   }
 
@@ -169,6 +186,7 @@ messages.on('onSubmit', (subm, taskId, formId) => {
           case 'critical':
             platform.log('critical checklist question answered, locking device!!!');
             MonoUtils.storage.set(IS_DEVICE_LOCKED_KEY, true);
+            env.project.saveEvent(new LockEvent(true));
             MonoUtils.wk.lock.lock();
             env.project.logout();
             return;
