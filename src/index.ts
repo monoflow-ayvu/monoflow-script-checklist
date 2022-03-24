@@ -1,6 +1,7 @@
 import * as MonoUtils from "@fermuch/monoutils";
 import { SessionEvent } from "./events";
 import { conf } from './config';
+import { myID } from "@fermuch/monoutils";
 
 let checklistUnlockTimer: NodeJS.Timeout | null = null;
 const LAST_LOGIN_KEY = 'LAST_LOGIN' as const;
@@ -25,6 +26,12 @@ class LockEvent extends MonoUtils.wk.event.BaseEvent {
 
 function isDeviceLocked() {
   return MonoUtils.storage.getBoolean(IS_DEVICE_LOCKED_KEY) === true;
+}
+
+function setHourmeter(target: string, value: number) {
+  const valueSeconds = value * 3600;
+  env.project?.collectionsManager?.ensureExists('hourmeters')?.get(myID()).set(target, valueSeconds);
+  MonoUtils.collections.getFrotaDoc()?.set('hourmeter', valueSeconds);
 }
 
 messages.on('onInit', function() {
@@ -178,7 +185,10 @@ messages.on('onSubmit', (subm, taskId, formId) => {
   if (conf.get('checklistQuestionsEnabled', false)) {
     platform.log('checking checklist questions');
     for (const question of conf.get('checklistQuestions', [])) {
-      if (subm.data[question.question] === question.answer) {
+      if (
+            subm.data[question.question] === question.answer
+        ||  question.action === 'hourmeter' && subm.data[question.question]
+      ) {
         switch(question.action) {
           case 'keepLocked':
             keepLocked = true;
@@ -190,6 +200,13 @@ messages.on('onSubmit', (subm, taskId, formId) => {
             MonoUtils.wk.lock.lock();
             env.project.logout();
             return;
+          case 'hourmeter': {
+            const hourmeter = Number(String(subm.data[question.question] || '').replace(/,/, '.'))
+            if (hourmeter > 0) {
+              setHourmeter(question.checklistTarget || 'hourmeter', hourmeter);
+            }
+          }
+          break;
         }
       }
     }

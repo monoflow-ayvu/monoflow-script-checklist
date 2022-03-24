@@ -566,6 +566,59 @@ describe('onSubmit', () => {
       expect(eventCall.getData().locked).toBe(true);
       expect(eventCall.getData().unlocked).toBe(false);
     });
+
+    it('sets hourmeter if hourmeter is true', () => {
+      getSettings = () => ({
+        enableLock: true,
+        lockChecklistTime: 10,
+        checklistId: 'asdf',
+        checklistQuestionsEnabled: true,
+        checklistQuestions: [{
+          question: 'foo',
+          action: 'hourmeter',
+          checklistTarget: 'hourmeterTarget'
+        }]
+      });
+      const colStore = {} as Record<any, any>;
+      const mockCol = {
+        get() {
+          return {
+            data: colStore,
+            get: (k: string) => colStore[k],
+            set: (k: string, v: any) => (colStore[k] = v),
+          }
+        }
+      };
+      (env.project as any) = {
+        collectionsManager: {
+          ensureExists: () => mockCol,
+        },
+        saveEvent: jest.fn(),
+        logins: [],
+      };
+      loadScript();
+      messages.emit('onInit');
+      messages.emit('onShowSubmit', undefined, 'asdf');
+
+      // does NOT set the hourmeter if the answer is empty or invalid number
+      messages.emit('onSubmit', { data: { foo: 'zaz' } } as never, undefined, 'asdf');
+      expect(colStore.hourmeterTarget).toBe(undefined);
+      expect(colStore.hourmeter).toBe(undefined);
+
+      messages.emit('onSubmit', { data: { foo: '9123jgdsngksndg' } } as never, undefined, 'asdf');
+      expect(colStore.hourmeterTarget).toBe(undefined);
+      expect(colStore.hourmeter).toBe(undefined);
+
+      // DOES set the hourmeter if the answer is a valid number
+      messages.emit('onSubmit', { data: { foo: '1' } } as never, undefined, 'asdf');
+      expect(colStore.hourmeterTarget).toBe(3600);
+      expect(colStore.hourmeter).toBe(3600);
+
+      // DOES set the hourmeter if the answer is a valid number
+      messages.emit('onSubmit', { data: { foo: '3.5' } } as never, undefined, 'asdf');
+      expect(colStore.hourmeterTarget).toBe(3600 * 3.5);
+      expect(colStore.hourmeter).toBe(3600 * 3.5);
+    });
   });
 });
 

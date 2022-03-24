@@ -27,7 +27,8 @@ type SpecialTagsConfig = {
 type ChecklistQuestion = {
   question: string;
   answer: string;
-  action: 'keepLocked' | 'critical';
+  action: 'keepLocked' | 'critical' | 'hourmeter';
+  checklistTarget?: string;
 }
 
 type ChecklistQuestionsConfig = {
