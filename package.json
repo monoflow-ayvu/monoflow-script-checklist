@@ -268,7 +268,7 @@
             "validate": {
               "required": true
             },
-            "customConditional": "show = action !== 'hourmeter';",
+            "customConditional": "show = row.action !== 'hourmeter';",
             "key": "answer",
             "type": "textfield",
             "input": true
