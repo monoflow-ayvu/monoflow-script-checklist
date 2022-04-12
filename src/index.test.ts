@@ -279,6 +279,47 @@ describe('onLogin', () => {
       expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBeTruthy();
     });
 
+    it('shows custom checklist for customChecklist tag, with device tag (instead of login tag)', () => {
+      const colStore = {} as Record<any, any>;
+      const mockCol = {
+        get() {
+          return {
+            data: colStore,
+            get: (k: string) => colStore[k],
+            set: (k: string, v: any) => (colStore[k] = v),
+          }
+        }
+      };
+      (env.project as any) = {
+        collectionsManager: {
+          ensureExists: () => mockCol,
+        },
+        saveEvent: jest.fn(),
+        logins: [{ key: '123', tags: [] }],
+        usersManager: {
+          users: [
+            {
+              $modelId: 'TEST',
+              tags: ['customChecklist'],
+            }
+          ]
+        }
+      };
+      getSettings = () => ({
+        enableSpecialTags: true,
+        specialTags: [{ tag: 'customChecklist', action: 'customChecklist', customChecklistId: 'abc123' }],
+      })
+      loadScript();
+      messages.emit('onInit');
+      messages.emit('onLogin', '123', '');
+
+      expect(colStore.currentLogin).toBe('123');
+      expect(env.data.RETURN_VALUE).toBe('abc123');
+      expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBeTruthy();
+    });
+
+    xit('when using customChecklist, it is handled the same as checklist or return when onShowSubmit/onSubmit', () => {})
+
     it('omitChecklist tag skips checklist', () => {
       const colStore = {} as Record<any, any>;
       const mockCol = {

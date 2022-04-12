@@ -72,8 +72,10 @@ messages.on('onLogin', function(l) {
   const dateDiffHours = Math.abs((new Date()).getTime() - lastLoginAt.getTime()) / 36e5;
   const lastLogin = MonoUtils.storage.getString(LAST_LOGIN_KEY);
   const userTags = env.project?.logins?.find((login) => login.key === l)?.tags || [];
+  const deviceTags = env.project?.usersManager?.users?.find?.((u) => u.$modelId === myID())?.tags || [];
   const specialTags = conf.get('specialTags', []);
   const supervisorTags = specialTags.filter((tag) => tag.action === 'supervisor');
+  // deviceTags are not added to isLoginSupervisor since a device cannot be a supervisor
   const isLoginSupervisor = userTags.some((tag) => supervisorTags.some((supervisorTag) => supervisorTag.tag === tag));
   const isLocked = isDeviceLocked();
 
@@ -99,7 +101,7 @@ messages.on('onLogin', function(l) {
   const login = env.project?.logins.find((ll) => ll.key === l);
   if (login && conf.get('enableSpecialTags', false)) {
     for (const tag of conf.get('specialTags', [])) {
-      if (login.tags.includes(tag.tag)) {
+      if (login.tags.includes(tag.tag) || deviceTags.includes(tag.tag)) {
         if (tag.action === 'customChecklist') {
           MonoUtils.wk.lock.unlock();
           return env.setData('RETURN_VALUE', tag.customChecklistId);
