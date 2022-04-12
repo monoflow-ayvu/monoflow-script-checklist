@@ -318,7 +318,80 @@ describe('onLogin', () => {
       expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBeTruthy();
     });
 
-    xit('when using customChecklist, it is handled the same as checklist or return when onShowSubmit/onSubmit', () => {})
+    it('when using customChecklist, it is handled the same as checklist or return when onShowSubmit/onSubmit', () => {
+      const colStore = {} as Record<any, any>;
+      const mockCol = {
+        get() {
+          return {
+            data: colStore,
+            get: (k: string) => colStore[k],
+            set: (k: string, v: any) => (colStore[k] = v),
+          }
+        }
+      };
+      (env.project as any) = {
+        collectionsManager: {
+          ensureExists: () => mockCol,
+        },
+        saveEvent: jest.fn(),
+        logins: [{ key: '123', tags: [] }],
+        usersManager: {
+          users: [
+            {
+              $modelId: 'TEST',
+              tags: ['customChecklist'],
+            }
+          ]
+        }
+      };
+      getSettings = () => ({
+        // lock
+        enableLock: true,
+        lockChecklistTime: 10,
+        checklistId: 'asdf', // this should NOT be the checklist id returned!
+        // special tags
+        enableSpecialTags: true,
+        specialTags: [{ tag: 'customChecklist', action: 'customChecklist', customChecklistId: 'abc123' }],
+      })
+      loadScript();
+      messages.emit('onInit');
+      messages.emit('onLogin', '123', '');
+
+      expect(colStore.currentLogin).toBe('123');
+      expect(env.data.RETURN_VALUE).toBe('abc123');
+      expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBeTruthy();
+
+      // custom test for condition of onShowSubmit now:
+      messages.emit('onShowSubmit', undefined, 'abc123');
+
+      expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+      jest.advanceTimersByTime(3 * 60 * 1000);
+      expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+      jest.advanceTimersByTime(100 * 60 * 1000);
+      expect(MonoUtils.wk.lock.getLockState()).toBe(true);
+
+      // should NOT set if it is the default checklist id
+      messages.emit('onLogout', '123');
+      messages.emit('onLogin', '123', '');
+      messages.emit('onShowSubmit', undefined, 'asdf');
+
+      expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+      jest.advanceTimersByTime(3 * 60 * 1000);
+      expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+      jest.advanceTimersByTime(100 * 60 * 1000);
+      expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+
+      // custom test for condition of onSubmit now:
+      messages.emit('onLogout', '123');
+      messages.emit('onLogin', '123', '');
+      messages.emit('onShowSubmit', undefined, 'abc123');
+      messages.emit('onSubmit', undefined, undefined, 'abc123');
+      expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+      jest.advanceTimersByTime(3 * 60 * 1000);
+      expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+      jest.advanceTimersByTime(100 * 60 * 1000);
+      expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+    });
 
     it('omitChecklist tag skips checklist', () => {
       const colStore = {} as Record<any, any>;

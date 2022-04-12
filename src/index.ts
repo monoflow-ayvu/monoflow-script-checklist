@@ -1,7 +1,7 @@
 import * as MonoUtils from "@fermuch/monoutils";
 import { SessionEvent } from "./events";
 import { conf } from './config';
-import { myID } from "@fermuch/monoutils";
+import { currentLogin, myID } from "@fermuch/monoutils";
 
 let checklistUnlockTimer: NodeJS.Timeout | null = null;
 const LAST_LOGIN_KEY = 'LAST_LOGIN' as const;
@@ -32,6 +32,27 @@ function setHourmeter(target: string, value: number) {
   const valueSeconds = value * 3600;
   env.project?.collectionsManager?.ensureExists('hourmeters')?.get(myID()).set(target, valueSeconds);
   MonoUtils.collections.getFrotaDoc()?.set('hourmeter', valueSeconds);
+}
+
+function getChecklistId() {
+  const default_ = conf.get('checklistId', '');
+
+  const userTags = env.project?.logins?.find((login) => login.key === currentLogin())?.tags || [];
+  const deviceTags = env.project?.usersManager?.users?.find?.((u) => u.$modelId === myID())?.tags || [];
+
+  if (conf.get('enableSpecialTags', false) === false) {
+    return default_;
+  }
+
+  for (const tag of conf.get('specialTags', [])) {
+    if (userTags.includes(tag.tag) || deviceTags.includes(tag.tag)) {
+      if (tag.action === 'customChecklist') {
+        return tag.customChecklistId;
+      }
+    }
+  }
+
+  return default_;
 }
 
 messages.on('onInit', function() {
@@ -99,7 +120,7 @@ messages.on('onLogin', function(l) {
   }
 
   const login = env.project?.logins.find((ll) => ll.key === l);
-  if (login && conf.get('enableSpecialTags', false)) {
+  if (conf.get('enableSpecialTags', false)) {
     for (const tag of conf.get('specialTags', [])) {
       if (login.tags.includes(tag.tag) || deviceTags.includes(tag.tag)) {
         if (tag.action === 'customChecklist') {
@@ -142,10 +163,12 @@ messages.on('onLogin', function(l) {
 });
 
 messages.on('onShowSubmit', (taskId, formId) => {
+  platform.log('onShowSubmit my checklist id:', getChecklistId(), 'formId: ', formId);
   if (
-    formId !== conf.get('checklistId', '')
+    formId !== getChecklistId()
     && formId !== conf.get('returnId', '')
   ) {
+    platform.log('skipping timer')
     return;
   }
 
@@ -164,14 +187,14 @@ messages.on('onShowSubmit', (taskId, formId) => {
 
 messages.on('onSubmit', (subm, taskId, formId) => {
   if (
-    formId === conf.get('returnId', '')
-    || formId === conf.get('checklistId', '')
+    formId === getChecklistId()
+    || formId === conf.get('returnId', '')
   ) {
     MonoUtils.storage.set(LAST_LOGIN_AT_KEY, (new Date()).toISOString());
   }
 
   if (
-    formId !== conf.get('checklistId', '')
+    formId !== getChecklistId()
     && formId !== conf.get('returnId', '')
   ) {
     return;
