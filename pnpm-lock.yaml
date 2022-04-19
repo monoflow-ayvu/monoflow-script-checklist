@@ -14,7 +14,7 @@ specifiers:
   '@types/jest': 27.4.1
   '@types/lodash': 4.14.182
   '@types/uuid': 8.3.4
-  babel-loader: 8.2.4
+  babel-loader: 8.2.5
   brotli-webpack-plugin: 1.1.0
   commander: 9.2.0
   compression-webpack-plugin: 9.2.0
@@ -55,7 +55,7 @@ devDependencies:
   '@types/jest': 27.4.1
   '@types/lodash': 4.14.182
   '@types/uuid': 8.3.4
-  babel-loader: 8.2.4_acba72ea4bf9d339cdfcd8f55cdb7006
+  babel-loader: 8.2.5_acba72ea4bf9d339cdfcd8f55cdb7006
   brotli-webpack-plugin: 1.1.0
   commander: 9.2.0
   compression-webpack-plugin: 9.2.0_webpack@5.72.0
@@ -2693,8 +2693,8 @@ packages:
       - supports-color
     dev: true
 
-  /babel-loader/8.2.4_acba72ea4bf9d339cdfcd8f55cdb7006:
-    resolution: {integrity: sha512-8dytA3gcvPPPv4Grjhnt8b5IIiTcq/zeXOPk4iTYI0SVXcsmuGg7JtBRDp8S9X+gJfhQ8ektjXZlDu1Bb33U8A==}
+  /babel-loader/8.2.5_acba72ea4bf9d339cdfcd8f55cdb7006:
+    resolution: {integrity: sha512-OSiFfH89LrEMiWd4pLNqGz4CwJDtbs2ZVc+iGu2HrkRfPxId9F2anQj38IxWpmRfsUY0aBZYi1EFcd3mhtRMLQ==}
     engines: {node: '>= 8.9'}
     peerDependencies:
       '@babel/core': ^7.0.0
