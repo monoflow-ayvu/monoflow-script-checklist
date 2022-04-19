@@ -119,6 +119,22 @@ messages.on('onLogin', function(l) {
     return env.setData('RETURN_VALUE', '');
   }
 
+  // return needs to be checked before special tags
+  // to avoid returning a custom checklist when the user
+  // is returning
+  if (conf.get('enableReturn', false)) {
+    // check if user has returned
+    if (lastLogin === l && dateDiffHours <= conf.get('returnHours', 0)) {
+      platform.log('user has returned');
+      MonoUtils.wk.lock.unlock();
+      if (!conf.get('returnId', '')) {
+        MonoUtils.storage.set(LAST_LOGIN_AT_KEY, (new Date()).toISOString());
+      }
+      return env.setData('RETURN_VALUE', conf.get('returnId', ''));
+    }
+  }
+
+  // now we can verify special tags
   const login = env.project?.logins.find((ll) => ll.key === l);
   if (conf.get('enableSpecialTags', false)) {
     for (const tag of conf.get('specialTags', [])) {
@@ -132,18 +148,6 @@ messages.on('onLogin', function(l) {
           return env.setData('RETURN_VALUE', '');
         }
       }
-    }
-  }
-
-  if (conf.get('enableReturn', false)) {
-    // check if user has returned
-    if (lastLogin === l && dateDiffHours <= conf.get('returnHours', 0)) {
-      platform.log('user has returned');
-      MonoUtils.wk.lock.unlock();
-      if (!conf.get('returnId', '')) {
-        MonoUtils.storage.set(LAST_LOGIN_AT_KEY, (new Date()).toISOString());
-      }
-      return env.setData('RETURN_VALUE', conf.get('returnId', ''));
     }
   }
 
