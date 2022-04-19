@@ -12,7 +12,7 @@ specifiers:
   '@types/commander': 2.12.2
   '@types/firebase': 3.2.1
   '@types/jest': 27.4.1
-  '@types/lodash': 4.14.181
+  '@types/lodash': 4.14.182
   '@types/uuid': 8.3.4
   babel-loader: 8.2.4
   brotli-webpack-plugin: 1.1.0
@@ -53,7 +53,7 @@ devDependencies:
   '@types/commander': 2.12.2
   '@types/firebase': 3.2.1
   '@types/jest': 27.4.1
-  '@types/lodash': 4.14.181
+  '@types/lodash': 4.14.182
   '@types/uuid': 8.3.4
   babel-loader: 8.2.4_acba72ea4bf9d339cdfcd8f55cdb7006
   brotli-webpack-plugin: 1.1.0
@@ -2306,8 +2306,8 @@ packages:
     resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
     dev: true
 
-  /@types/lodash/4.14.181:
-    resolution: {integrity: sha512-n3tyKthHJbkiWhDZs3DkhkCzt2MexYHXlX0td5iMplyfwketaOeKboEVBqzceH7juqvEg3q5oUoBFxSLu7zFag==}
+  /@types/lodash/4.14.182:
+    resolution: {integrity: sha512-/THyiqyQAP9AfARo4pF+aCGcyiQ94tX/Is2I7HofNRqoYLgN1PBoOWu2/zTA5zMxzP5EFutMtWtGAFRKUe961Q==}
     dev: true
 
   /@types/long/4.0.1:
