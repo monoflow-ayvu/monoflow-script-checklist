@@ -6,7 +6,7 @@ specifiers:
   '@babel/preset-env': 7.16.11
   '@babel/preset-typescript': 7.16.7
   '@fermuch/monoutils': 0.0.37
-  '@fermuch/telematree': 9.20.0
+  '@fermuch/telematree': 9.21.0
   '@jsdevtools/version-bump-prompt': 6.1.0
   '@size-limit/preset-big-lib': 7.0.8
   '@types/commander': 2.12.2
@@ -37,7 +37,7 @@ specifiers:
 
 dependencies:
   '@fermuch/monoutils': 0.0.37_716bd1622f9243f33404f1ca8dacc94d
-  '@fermuch/telematree': 9.20.0_716bd1622f9243f33404f1ca8dacc94d
+  '@fermuch/telematree': 9.21.0_716bd1622f9243f33404f1ca8dacc94d
   cross-fetch: 3.1.5
   firebase: 9.6.11
   lodash: 4.17.21
@@ -1314,7 +1314,7 @@ packages:
   /@fermuch/monoutils/0.0.37_716bd1622f9243f33404f1ca8dacc94d:
     resolution: {integrity: sha512-aJa2sjB9p1FeKUdO3cEx+OoJSxzt+UqkTwL2w7pSlsKynag8XneXdh9DuHf88UxPSnx64kn2dadtA5hNLV5FTg==}
     dependencies:
-      '@fermuch/telematree': 9.20.0_716bd1622f9243f33404f1ca8dacc94d
+      '@fermuch/telematree': 9.21.0_716bd1622f9243f33404f1ca8dacc94d
       typed-emitter: 2.1.0
     transitivePeerDependencies:
       - cross-fetch
@@ -1323,19 +1323,19 @@ packages:
       - mobx-keystone
     dev: false
 
-  /@fermuch/telematree/9.20.0_716bd1622f9243f33404f1ca8dacc94d:
-    resolution: {integrity: sha512-Dm8gE5EXkb1vd8ZpXwjjfx0lijEu0laGzOoiP1xB1qbdLMA7I++q+QtHmsmPvCt0aZ6jPHqVfOKSA7qb3Lf+AA==}
+  /@fermuch/telematree/9.21.0_716bd1622f9243f33404f1ca8dacc94d:
+    resolution: {integrity: sha512-tTehwavHfqvc8d8XemAVeDsaJypz/ljG3sN5Tvp4bweKE0wPOU/rR543RiFVtsx194do0c0ywFTnYj9awCGyEQ==}
     peerDependencies:
       cross-fetch: ^3.1.5
       mobx: ^6.4.2
-      mobx-keystone: 0.67.0
+      mobx-keystone: 0.67.3
     dependencies:
       '@stablelib/snappy': 1.0.1
       cross-fetch: 3.1.5
       eta: 1.12.3
       eval5: 1.4.7
       fflate: 0.7.3
-      formiojs: 4.14.5
+      formiojs: 4.14.6
       imurmurhash: 0.1.4
       lodash: 4.17.21
       mobx: 6.5.0
@@ -1756,8 +1756,8 @@ packages:
   /@firebase/webchannel-wrapper/0.6.1:
     resolution: {integrity: sha512-9FqhNjKQWpQ3fGnSOCovHOm+yhhiorKEqYLAfd525jWavunDJcx8rOW6i6ozAh+FbwcYMkL7b+3j4UR/30MpoQ==}
 
-  /@formio/bootstrap3/2.12.1:
-    resolution: {integrity: sha512-G8Ub+sdrOPux7cGS4PgOuuk0zlNjjp6h3wVVN0/BazjxJI5KOiyUgUtK/r2I8x5a+Evbcjn/Lx8zf4YSb8u5CA==}
+  /@formio/bootstrap3/2.12.2:
+    resolution: {integrity: sha512-Y1WD/U22HHKRl1MzUt65bXeFHYO9Wlt+wefRqXFrOhIgbmkfTjCx6e0n2b8t/IYz9FUMg+/GTKdqaBrTZgjrTA==}
     dependencies:
       resize-observer-polyfill: 1.5.1
     dev: false
@@ -3806,10 +3806,10 @@ packages:
       mime-types: 2.1.35
     dev: true
 
-  /formiojs/4.14.5:
-    resolution: {integrity: sha512-f/jkJm1PXxaT/Fo3GqUUsp+WXPHbQyDQ2nJWx77lNi2AOE1VvEF8UN8zyq01xYlqE+1duNLb0Ck0gg6w77CqaQ==}
+  /formiojs/4.14.6:
+    resolution: {integrity: sha512-k7ouqAz2WPkPjqNIF2Z5190RzIz4Yp31Hh0NImMgtsF4fbFAE+ZZ6Wi2+0TCvMRUnDbttarN02VSaRvZh0YIng==}
     dependencies:
-      '@formio/bootstrap3': 2.12.1
+      '@formio/bootstrap3': 2.12.2
       '@formio/choices.js': 9.0.1
       '@formio/semantic': 2.6.0
       '@formio/vanilla-text-mask': 5.1.1
