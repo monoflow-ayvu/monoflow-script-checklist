@@ -20,7 +20,7 @@ specifiers:
   compression-webpack-plugin: 9.2.0
   cross-fetch: 3.1.5
   firebase: 9.6.11
-  graphql: 16.3.0
+  graphql: 16.4.0
   graphql-request: 4.2.0
   inquirer: 8.2.2
   jest: 28.0.0
@@ -59,8 +59,8 @@ devDependencies:
   brotli-webpack-plugin: 1.1.0
   commander: 9.2.0
   compression-webpack-plugin: 9.2.0_webpack@5.72.0
-  graphql: 16.3.0
-  graphql-request: 4.2.0_graphql@16.3.0
+  graphql: 16.4.0
+  graphql-request: 4.2.0_graphql@16.4.0
   inquirer: 8.2.2
   jest: 28.0.0
   mobx-keystone: 0.67.3_mobx@6.5.0
@@ -3889,7 +3889,7 @@ packages:
     resolution: {integrity: sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==}
     dev: true
 
-  /graphql-request/4.2.0_graphql@16.3.0:
+  /graphql-request/4.2.0_graphql@16.4.0:
     resolution: {integrity: sha512-uFeMyhhl8ss4LFgjlfPeAn2pqYw+CJto+cjj71uaBYIMMK2jPIqgHm5KEFxUk0YDD41A8Bq31a2b4G2WJBlp2Q==}
     peerDependencies:
       graphql: 14 - 16
@@ -3897,14 +3897,14 @@ packages:
       cross-fetch: 3.1.5
       extract-files: 9.0.0
       form-data: 3.0.1
-      graphql: 16.3.0
+      graphql: 16.4.0
     transitivePeerDependencies:
       - encoding
     dev: true
 
-  /graphql/16.3.0:
-    resolution: {integrity: sha512-xm+ANmA16BzCT5pLjuXySbQVFwH3oJctUVdy81w1sV0vBU0KgDdBGtxQOUd5zqOBk/JayAFeG8Dlmeq74rjm/A==}
-    engines: {node: ^12.22.0 || ^14.16.0 || >=16.0.0}
+  /graphql/16.4.0:
+    resolution: {integrity: sha512-tYDNcRvKCcfHREZYje3v33NSrSD/ZpbWWdPtBtUUuXx9NCo/2QDxYzNqCnMvfsrnbwRpEHMovVrPu/ERoLrIRg==}
+    engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
     dev: true
 
   /has-bigints/1.0.1:
