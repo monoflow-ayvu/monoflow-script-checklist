@@ -22,7 +22,7 @@ specifiers:
   firebase: 9.6.11
   graphql: 16.4.0
   graphql-request: 4.2.0
-  inquirer: 8.2.2
+  inquirer: 8.2.3
   jest: 28.0.1
   lodash: 4.17.21
   mobx: 6.5.0
@@ -61,7 +61,7 @@ devDependencies:
   compression-webpack-plugin: 9.2.0_webpack@5.72.0
   graphql: 16.4.0
   graphql-request: 4.2.0_graphql@16.4.0
-  inquirer: 8.2.2
+  inquirer: 8.2.3
   jest: 28.0.1
   mobx-keystone: 0.67.3_mobx@6.5.0
   semver: 7.3.7
@@ -4054,8 +4054,8 @@ packages:
       through: 2.3.8
     dev: true
 
-  /inquirer/8.2.2:
-    resolution: {integrity: sha512-pG7I/si6K/0X7p1qU+rfWnpTE1UIkTONN1wxtzh0d+dHXtT/JG6qBgLxoyHVsQa8cFABxAPh0pD6uUUHiAoaow==}
+  /inquirer/8.2.3:
+    resolution: {integrity: sha512-jmoBlmWUChXgVi1wGDZsD7pWCaibJKmL+8+E2jaiWiRj8OlJLwQdQQS2CIjgvdg8UUHX+oyagQKicVVcqwxi9Q==}
     engines: {node: '>=12.0.0'}
     dependencies:
       ansi-escapes: 4.3.2
@@ -4072,6 +4072,7 @@ packages:
       string-width: 4.2.3
       strip-ansi: 6.0.1
       through: 2.3.8
+      wrap-ansi: 7.0.0
     dev: true
 
   /internal-slot/1.0.3:
