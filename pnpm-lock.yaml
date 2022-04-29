@@ -31,7 +31,7 @@ specifiers:
   size-limit: 7.0.8
   ts-loader: 9.2.9
   typed-emitter: 2.1.0
-  typescript: 4.6.3
+  typescript: 4.6.4
   webpack: 5.72.0
   webpack-cli: 4.9.2
 
@@ -66,9 +66,9 @@ devDependencies:
   mobx-keystone: 0.68.2_mobx@6.5.0
   semver: 7.3.7
   size-limit: 7.0.8
-  ts-loader: 9.2.9_typescript@4.6.3+webpack@5.72.0
+  ts-loader: 9.2.9_typescript@4.6.4+webpack@5.72.0
   typed-emitter: 2.1.0
-  typescript: 4.6.3
+  typescript: 4.6.4
   webpack: 5.72.0_webpack-cli@4.9.2
   webpack-cli: 4.9.2_webpack@5.72.0
 
@@ -6148,7 +6148,7 @@ packages:
   /tr46/0.0.3:
     resolution: {integrity: sha1-gYT9NH2snNwYWZLzpmIuFLnZq2o=}
 
-  /ts-loader/9.2.9_typescript@4.6.3+webpack@5.72.0:
+  /ts-loader/9.2.9_typescript@4.6.4+webpack@5.72.0:
     resolution: {integrity: sha512-b0+vUY2/enb0qYtDQuNlDnJ9900NTiPiJcDJ6sY7ax1CCCwXfYIqPOMm/BwW7jsF1km+Oz8W9s31HLuD+FLIMg==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -6159,7 +6159,7 @@ packages:
       enhanced-resolve: 5.9.2
       micromatch: 4.0.5
       semver: 7.3.7
-      typescript: 4.6.3
+      typescript: 4.6.4
       webpack: 5.72.0_webpack-cli@4.9.2
     dev: true
 
@@ -6196,8 +6196,8 @@ packages:
     optionalDependencies:
       rxjs: 7.5.5
 
-  /typescript/4.6.3:
-    resolution: {integrity: sha512-yNIatDa5iaofVozS/uQJEl3JRWLKKGJKh6Yaiv0GLGSuhpFJe7P3SbHZ8/yjAHRQwKRoA6YZqlfjXWmVzoVSMw==}
+  /typescript/4.6.4:
+    resolution: {integrity: sha512-9ia/jWHIEbo49HfjrLGfKbZSuWo9iTMwXO+Ca3pRsSpbsMbc7/IU8NKdCZVRRBafVPGnoJeFL76ZOAA84I9fEg==}
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true
