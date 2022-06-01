@@ -11,7 +11,7 @@ specifiers:
   '@size-limit/preset-big-lib': 7.0.8
   '@types/commander': 2.12.2
   '@types/firebase': 3.2.1
-  '@types/jest': 27.5.1
+  '@types/jest': 27.5.2
   '@types/lodash': 4.14.182
   '@types/uuid': 8.3.4
   babel-loader: 8.2.5
@@ -52,7 +52,7 @@ devDependencies:
   '@size-limit/preset-big-lib': 7.0.8_f4393431830134ccdad49ba5b15925b4
   '@types/commander': 2.12.2
   '@types/firebase': 3.2.1
-  '@types/jest': 27.5.1
+  '@types/jest': 27.5.2
   '@types/lodash': 4.14.182
   '@types/uuid': 8.3.4
   babel-loader: 8.2.5_b691d163cf7cf2d6fe2c056467b6e090
@@ -2311,8 +2311,8 @@ packages:
       '@types/istanbul-lib-report': 3.0.0
     dev: true
 
-  /@types/jest/27.5.1:
-    resolution: {integrity: sha512-fUy7YRpT+rHXto1YlL+J9rs0uLGyiqVt3ZOTQR+4ROc47yNl8WLdVLgUloBRhOxP1PZvguHl44T3H0wAWxahYQ==}
+  /@types/jest/27.5.2:
+    resolution: {integrity: sha512-mpT8LJJ4CMeeahobofYWIjFo0xonRS/HfxnVEPMPFSQdGUt1uHCnoPT7Zhb+sjDU2wz0oKV0OLUR0WzrHNgfeA==}
     dependencies:
       jest-matcher-utils: 27.5.1
       pretty-format: 27.5.1
