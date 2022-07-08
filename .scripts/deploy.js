@@ -1,5 +1,4 @@
 const package = require('../package.json');
-const inquirer = require('inquirer');
 const commander = require('commander');
 const fs = require('fs');
 const path = require('path');
@@ -112,7 +111,8 @@ const ui = {
 (async function () {
   ui.log.write(`⚡ Deploying ${package.name}@${package.version} ...\n\n`);
   if (!options.force) {
-    const answers = await inquirer.prompt(questions);
+    const inquirer = await import('inquirer');
+    const answers = await inquirer.default.prompt(questions);
     if (!answers.deploy) {
       ui.log.write('❌ Deploy cancelled.');
       process.exit(1);
