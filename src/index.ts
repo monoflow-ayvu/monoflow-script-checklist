@@ -31,6 +31,7 @@ function isDeviceLocked() {
 function setHourmeter(target: string, value: number) {
   const valueSeconds = value * 3600;
   env.project?.collectionsManager?.ensureExists('hourmeters')?.get(myID()).set(target, valueSeconds);
+  env.project?.collectionsManager?.ensureExists('hourmeters')?.get(myID()).set(`${target}_time`, Number(new Date()));
   MonoUtils.collections.getFrotaDoc()?.set('hourmeter', valueSeconds);
 }
 
