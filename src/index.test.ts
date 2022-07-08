@@ -766,11 +766,13 @@ describe('onSubmit', () => {
       messages.emit('onSubmit', { data: { foo: '1' } } as never, undefined, 'asdf');
       expect(colStore.hourmeterTarget).toBe(3600);
       expect(colStore.hourmeter).toBe(3600);
+      expect(colStore.hourmeterTarget_time).toBeGreaterThan(0);
 
       // DOES set the hourmeter if the answer is a valid number
       messages.emit('onSubmit', { data: { foo: '3.5' } } as never, undefined, 'asdf');
       expect(colStore.hourmeterTarget).toBe(3600 * 3.5);
       expect(colStore.hourmeter).toBe(3600 * 3.5);
+      expect(colStore.hourmeterTarget_time).toBeGreaterThan(0);
     });
   });
 });
