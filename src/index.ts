@@ -24,6 +24,21 @@ class LockEvent extends MonoUtils.wk.event.BaseEvent {
   }
 }
 
+class HourmeterSetEvent extends MonoUtils.wk.event.BaseEvent {
+  kind = 'hourmeter-set' as const;
+
+  constructor(public readonly target: string, public readonly seconds: number) {
+    super();
+  }
+
+  getData() {
+    return {
+      target: this.target,
+      seconds: this.seconds,
+    };
+  }
+}
+
 function isDeviceLocked() {
   return MonoUtils.storage.getBoolean(IS_DEVICE_LOCKED_KEY) === true;
 }
@@ -33,6 +48,8 @@ function setHourmeter(target: string, value: number) {
   env.project?.collectionsManager?.ensureExists('hourmeters')?.get(myID()).set(target, valueSeconds);
   env.project?.collectionsManager?.ensureExists('hourmeters')?.get(myID()).set(`${target}_time`, Number(new Date()));
   MonoUtils.collections.getFrotaDoc()?.set('hourmeter', valueSeconds);
+
+  env.project.saveEvent(new HourmeterSetEvent(target, valueSeconds))
 }
 
 function getChecklistId() {

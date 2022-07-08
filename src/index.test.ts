@@ -757,22 +757,32 @@ describe('onSubmit', () => {
       messages.emit('onSubmit', { data: { foo: 'zaz' } } as never, undefined, 'asdf');
       expect(colStore.hourmeterTarget).toBe(undefined);
       expect(colStore.hourmeter).toBe(undefined);
+      expect(env.project.saveEvent).not.toBeCalled();
 
       messages.emit('onSubmit', { data: { foo: '9123jgdsngksndg' } } as never, undefined, 'asdf');
       expect(colStore.hourmeterTarget).toBe(undefined);
       expect(colStore.hourmeter).toBe(undefined);
+      expect(env.project.saveEvent).not.toBeCalled();
 
       // DOES set the hourmeter if the answer is a valid number
       messages.emit('onSubmit', { data: { foo: '1' } } as never, undefined, 'asdf');
       expect(colStore.hourmeterTarget).toBe(3600);
       expect(colStore.hourmeter).toBe(3600);
       expect(colStore.hourmeterTarget_time).toBeGreaterThan(0);
+      expect(env.project.saveEvent).toBeCalledTimes(1);
+      expect((env.project.saveEvent as jest.Mock).mock.calls[0][0].kind).toBe('hourmeter-set')
+      expect((env.project.saveEvent as jest.Mock).mock.calls[0][0].getData().target).toBe('hourmeterTarget')
+      expect((env.project.saveEvent as jest.Mock).mock.calls[0][0].getData().seconds).toBe(3600)
 
       // DOES set the hourmeter if the answer is a valid number
       messages.emit('onSubmit', { data: { foo: '3.5' } } as never, undefined, 'asdf');
       expect(colStore.hourmeterTarget).toBe(3600 * 3.5);
       expect(colStore.hourmeter).toBe(3600 * 3.5);
       expect(colStore.hourmeterTarget_time).toBeGreaterThan(0);
+      expect(env.project.saveEvent).toBeCalledTimes(2);
+      expect((env.project.saveEvent as jest.Mock).mock.calls[1][0].kind).toBe('hourmeter-set')
+      expect((env.project.saveEvent as jest.Mock).mock.calls[1][0].getData().target).toBe('hourmeterTarget')
+      expect((env.project.saveEvent as jest.Mock).mock.calls[1][0].getData().seconds).toBe(3600 * 3.5)
     });
   });
 });
