@@ -120,6 +120,11 @@ messages.on('onLogin', function(l) {
 
   env.setData('IS_DEVICE_LOCKED', isLocked);
 
+  if (isLoginSupervisor) {
+    MonoUtils.storage.del(LAST_LOGIN_KEY);
+    MonoUtils.storage.del(LAST_LOGIN_AT_KEY);
+  }
+
   if (isLocked && !isLoginSupervisor) {
     platform.log('Device is locked, but user is not a supervisor');
     return env.setData('RETURN_VALUE', {error: 'Supervisor requerido.'});
