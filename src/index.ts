@@ -52,10 +52,10 @@ function setHourmeter(target: string, value: number) {
   env.project.saveEvent(new HourmeterSetEvent(target, valueSeconds))
 }
 
-function getChecklistId() {
+function getChecklistId(login: string) {
   const default_ = conf.get('checklistId', '');
 
-  const userTags = env.project?.logins?.find((login) => login.key === currentLogin())?.tags || [];
+  const userTags = env.project?.logins?.find((l) => l.key === login || l.$modelId === login)?.tags || [];
   const deviceTags = env.project?.usersManager?.users?.find?.((u) => u.$modelId === myID())?.tags || [];
 
   if (conf.get('enableSpecialTags', false) === false) {
@@ -63,9 +63,33 @@ function getChecklistId() {
   }
 
   for (const tag of conf.get('specialTags', [])) {
-    if (userTags.includes(tag.tag) || deviceTags.includes(tag.tag)) {
-      if (tag.action === 'customChecklist') {
+    if (tag.action === 'customChecklist') {
+      if (userTags.includes(tag.tag) || deviceTags.includes(tag.tag)) {
         return tag.customChecklistId;
+      }
+    }
+  }
+
+  return default_;
+}
+
+function getReturnId(login: string): string {
+  if (!conf.get('enableReturn', false)) {
+    return '';
+  }
+
+  const default_ = conf.get('returnId', '');
+  if (conf.get('enableSpecialTags', false) === false) {
+    return default_;
+  }
+
+  const userTags = env.project?.logins?.find((l) => l.key === login || l.$modelId === login)?.tags || [];
+  const deviceTags = env.project?.usersManager?.users?.find?.((u) => u.$modelId === myID())?.tags || [];
+
+  for (const tag of conf.get('specialTags', [])) {
+    if (tag.action === 'customReturn') {
+      if (userTags.includes(tag.tag) || deviceTags.includes(tag.tag)) {
+        return tag.customReturnId;
       }
     }
   }
@@ -150,10 +174,10 @@ messages.on('onLogin', function(l) {
     if (lastLogin === l && dateDiffHours <= conf.get('returnHours', 0)) {
       platform.log('user has returned');
       MonoUtils.wk.lock.unlock();
-      if (!conf.get('returnId', '')) {
+      if (!getReturnId(l)) {
         MonoUtils.storage.set(LAST_LOGIN_AT_KEY, (new Date()).toISOString());
       }
-      return env.setData('RETURN_VALUE', conf.get('returnId', ''));
+      return env.setData('RETURN_VALUE', getReturnId(l));
     }
   }
 
@@ -190,10 +214,10 @@ messages.on('onLogin', function(l) {
 });
 
 messages.on('onShowSubmit', (taskId, formId) => {
-  platform.log('onShowSubmit my checklist id:', getChecklistId(), 'formId: ', formId);
+  platform.log('onShowSubmit my checklist id:', getChecklistId(currentLogin()), 'formId: ', formId);
   if (
-    formId !== getChecklistId()
-    && formId !== conf.get('returnId', '')
+    formId !== getChecklistId(currentLogin())
+    && formId !== getReturnId(currentLogin())
   ) {
     platform.log('skipping timer')
     return;
@@ -214,15 +238,15 @@ messages.on('onShowSubmit', (taskId, formId) => {
 
 messages.on('onSubmit', (subm, taskId, formId) => {
   if (
-    formId === getChecklistId()
-    || formId === conf.get('returnId', '')
+    formId === getChecklistId(currentLogin())
+    || formId === getReturnId(currentLogin())
   ) {
     MonoUtils.storage.set(LAST_LOGIN_AT_KEY, (new Date()).toISOString());
   }
 
   if (
-    formId !== getChecklistId()
-    && formId !== conf.get('returnId', '')
+    formId !== getChecklistId(currentLogin())
+    && formId !== getReturnId(currentLogin())
   ) {
     return;
   }

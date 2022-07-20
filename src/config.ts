@@ -13,11 +13,33 @@ type LockConfig = {
   lockChecklistTime: number;
 };
 
-type SpecialTag = {
+type SpecialTagSupervisor = {
   tag: string;
-  action: "customChecklist" | "omitChecklist" | "supervisor";
+  action: "supervisor";
+}
+
+type SpecialTagOmitChecklist = {
+  tag: string;
+  action: "omitChecklist";
+}
+
+type SpecialTagCustomChecklist = {
+  tag: string;
+  action: "customChecklist";
   customChecklistId: string;
-};
+}
+
+type SpecialTagCustomReturn = {
+  tag: string;
+  action: "customReturn";
+  customReturnId: string;
+}
+
+type SpecialTag =
+    SpecialTagSupervisor
+  | SpecialTagOmitChecklist
+  | SpecialTagCustomChecklist
+  | SpecialTagCustomReturn;
 
 type SpecialTagsConfig = {
   enableSpecialTags: boolean;

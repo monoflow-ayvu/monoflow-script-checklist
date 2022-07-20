@@ -502,6 +502,45 @@ describe('onLogin', () => {
       expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBeTruthy();
       expect(env.data.RETURN_VALUE).toBe('foobar123');
     })
+
+    it('shows custom return if there is one for the device', () => {
+      const colStore = {} as Record<any, any>;
+      const mockCol = {
+        get() {
+          return {
+            data: colStore,
+            get: (k: string) => colStore[k],
+            set: (k: string, v: any) => (colStore[k] = v),
+          }
+        }
+      };
+      (env.project as any) = {
+        collectionsManager: {
+          ensureExists: () => mockCol,
+        },
+        saveEvent: jest.fn(),
+        logins: [{ key: '123', tags: ['customReturn'] }],
+      };
+      getSettings = () => ({
+        enableReturn: true,
+        returnHours: 10,
+        returnId: 'foobar123',
+        checklistId: 'asdf',
+        enableSpecialTags: true,
+        specialTags: [{ tag: 'customReturn', action: 'customReturn', customReturnId: 'return123' }],
+      });
+
+      loadScript();
+      messages.emit('onInit');
+
+      MonoUtils.storage.set('LAST_LOGIN', '123');
+      MonoUtils.storage.set('LAST_LOGIN_AT', (new Date()).toISOString());
+      messages.emit('onLogin', '123', '');
+
+      expect(colStore.currentLogin).toBe('123');
+      expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBeTruthy();
+      expect(env.data.RETURN_VALUE).toBe('return123');
+    })
   });
 });
 
