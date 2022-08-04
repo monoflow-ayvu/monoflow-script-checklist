@@ -193,7 +193,7 @@ describe('onLogin', () => {
   
       env.setData('RETURN_VALUE', undefined);
       messages.emit('onLogin', 'asd', '');
-      expect(env.data.RETURN_VALUE).toBeUndefined();
+      expect(env.data.RETURN_VALUE).toBeFalsy();
     });
   
     it('denies login if both device and login have locking tag but different', () => {
