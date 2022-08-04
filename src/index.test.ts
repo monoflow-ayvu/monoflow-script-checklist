@@ -15,6 +15,7 @@ describe("onInit", () => {
     MonoUtils.storage.set('IS_DEVICE_LOCKED', false);
     MonoUtils.storage.set('LAST_LOGIN_AT', undefined);
     MonoUtils.storage.set('LAST_LOGIN', undefined);
+    MonoUtils.storage.set('RETURN_VALUE', undefined);
   });
 
   it('runs without errors', () => {
@@ -173,6 +174,48 @@ describe('onLogin', () => {
     messages.emit('onLogin', '123', '');
     expect(env.data.IS_DEVICE_LOCKED).toBe(false);
     expect(MonoUtils.storage.getString('LAST_LOGIN_AT')).toBeTruthy();
+  });
+
+  describe('restrictive tags', () => {
+    it('permits login if both device and login have same locking tag', () => {
+      getSettings = () => ({
+        errorString: 'custom error',
+        tags: [{tag: 'foobar'}],
+      });
+      (env as any).project = {
+        saveEvent: jest.fn(),
+        logins: [{key: 'asd', tags: ['foobar']}],
+        usersManager: {
+          users: [{$modelId: 'TEST', tags: ['foobar']}]
+        }
+      };
+      loadScript();
+  
+      env.setData('RETURN_VALUE', undefined);
+      messages.emit('onLogin', 'asd', '');
+      expect(env.data.RETURN_VALUE).toBeUndefined();
+    });
+  
+    it('denies login if both device and login have locking tag but different', () => {
+      getSettings = () => ({
+        errorString: 'custom error',
+        restrictiveTags: [{tag: 'foobar'}, {tag: 'barfoo'}],
+      });
+      (env as any).project = {
+        saveEvent: jest.fn(),
+        logins: [{key: 'asd', tags: ['foobar']}],
+        usersManager: {
+          users: [{$modelId: 'TEST', tags: ['barfoo']}]
+        }
+      };
+      loadScript();
+  
+      env.setData('RETURN_VALUE', undefined);
+      messages.emit('onLogin', 'asd', '');
+      expect(env.data.RETURN_VALUE).toStrictEqual({
+        error: 'custom error',
+      });
+    });
   });
 
   describe('onLogin is a supervisor', () => {
