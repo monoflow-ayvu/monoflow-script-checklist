@@ -143,7 +143,6 @@ messages.on('onLogin', function(l) {
     MonoUtils.storage.set(IS_DEVICE_LOCKED_KEY, false);
     MonoUtils.storage.set(LAST_LOGIN_AT_KEY, (new Date()).toISOString());
     env.project.saveEvent(new LockEvent(false));
-    // supervisor omits any return value
     return env.setData('RETURN_VALUE', '');
   }
 
@@ -158,10 +157,7 @@ messages.on('onLogin', function(l) {
       if (!getReturnId(l)) {
         MonoUtils.storage.set(LAST_LOGIN_AT_KEY, (new Date()).toISOString());
       }
-      if (!env.data.RETURN_VALUE) {
-        env.setData('RETURN_VALUE', getReturnId(l));
-      }
-      return;
+      return env.setData('RETURN_VALUE', getReturnId(l));
     }
   }
 
@@ -172,17 +168,11 @@ messages.on('onLogin', function(l) {
       if (login.tags.includes(tag.tag) || deviceTags.includes(tag.tag)) {
         if (tag.action === 'customChecklist') {
           MonoUtils.wk.lock.unlock();
-          if (!env.data.RETURN_VALUE) {
-            env.setData('RETURN_VALUE', tag.customChecklistId);
-          }
-          return;
+          return env.setData('RETURN_VALUE', tag.customChecklistId);
         } else if (tag.action === 'omitChecklist') {
           MonoUtils.wk.lock.unlock();
           MonoUtils.storage.set(LAST_LOGIN_AT_KEY, (new Date()).toISOString());
-          if (!env.data.RETURN_VALUE) {
-            env.setData('RETURN_VALUE', '');
-          }
-          return;
+          return env.setData('RETURN_VALUE', '');
         }
       }
     }
@@ -191,10 +181,7 @@ messages.on('onLogin', function(l) {
   if (lastLogin === l && dateDiffHours < conf.get('checklistHours', 0)) {
     platform.log('user has logged in before and is not overdue, skipping checklist');
     MonoUtils.wk.lock.unlock();
-    if (!env.data.RETURN_VALUE) {
-      env.setData('RETURN_VALUE', '');
-    }
-    return;
+    return env.setData('RETURN_VALUE', '');
   }
 
   // we'll continue logic for locks on onSubmit
@@ -203,10 +190,7 @@ messages.on('onLogin', function(l) {
   if (!conf.get('checklistId')) {
     MonoUtils.storage.set(LAST_LOGIN_AT_KEY, (new Date()).toISOString());
   }
-  if (!env.data.RETURN_VALUE) {
-    env.setData('RETURN_VALUE', conf.get('checklistId', ''));
-  }
-  return;
+  return env.setData('RETURN_VALUE', conf.get('checklistId', ''));
 });
 
 messages.on('onShowSubmit', (taskId, formId) => {
