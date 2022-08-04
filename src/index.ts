@@ -1,43 +1,14 @@
 import * as MonoUtils from "@fermuch/monoutils";
-import { SessionEvent } from "./events";
+import { ChecklistOvertimeEvent, HourmeterSetEvent, LockEvent, SessionEvent } from "./events";
 import { conf } from './config';
 import { currentLogin, myID } from "@fermuch/monoutils";
+import { setUrgentNotification } from "./utils";
 
 let checklistUnlockTimer: NodeJS.Timeout | null = null;
 const LAST_LOGIN_KEY = 'LAST_LOGIN' as const;
 const LAST_LOGIN_AT_KEY = 'LAST_LOGIN_AT' as const;
 const IS_DEVICE_LOCKED_KEY = 'IS_DEVICE_LOCKED' as const;
-
-class LockEvent extends MonoUtils.wk.event.BaseEvent {
-  kind = 'critical-lock' as const;
-
-  constructor(public readonly isLocked: boolean) {
-    super();
-  }
-
-  getData() {
-    return {
-      locked: this.isLocked,
-      unlocked: !this.isLocked,
-      isLocked: this.isLocked,
-    };
-  }
-}
-
-class HourmeterSetEvent extends MonoUtils.wk.event.BaseEvent {
-  kind = 'hourmeter-set' as const;
-
-  constructor(public readonly target: string, public readonly seconds: number) {
-    super();
-  }
-
-  getData() {
-    return {
-      target: this.target,
-      seconds: this.seconds,
-    };
-  }
-}
+const ACTION_OK_TIMELIMIT = 'checklist:expired-ok' as const;
 
 function isDeviceLocked() {
   return MonoUtils.storage.getBoolean(IS_DEVICE_LOCKED_KEY) === true;
@@ -223,6 +194,7 @@ messages.on('onShowSubmit', (taskId, formId) => {
     return;
   }
 
+  // clear last unlock timer, so we can safely start a new one
   if (checklistUnlockTimer) {
     clearTimeout(checklistUnlockTimer);
     checklistUnlockTimer = null;
@@ -232,6 +204,19 @@ messages.on('onShowSubmit', (taskId, formId) => {
     checklistUnlockTimer = setTimeout(() => {
       platform.log('form not completed on time, locking checklist');
       MonoUtils.wk.lock.lock();
+      env.project?.saveEvent(new ChecklistOvertimeEvent(formId || ''));
+      if (conf.get('showTimeAlert', false)) {
+        setUrgentNotification({
+          title: 'Tempo para preencher checklist expirado',
+          message: 'O tempo límite para preencher o checklist foi superado.',
+          urgent: true,
+          actions: [{
+            action: ACTION_OK_TIMELIMIT,
+            name: 'OK',
+            payload: null,
+          }]
+        })
+      }
     }, conf.get('lockChecklistTime', 0) * 60 * 1000);
   }
 })
@@ -310,4 +295,12 @@ messages.on('onEnd', () => {
     clearTimeout(checklistUnlockTimer);
     checklistUnlockTimer = null;
   }
+})
+
+messages.on('onCall', (actId, payload) => {
+  if (actId !== ACTION_OK_TIMELIMIT) {
+    return;
+  }
+
+  setUrgentNotification(null);
 })

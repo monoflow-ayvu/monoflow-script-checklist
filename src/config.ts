@@ -9,6 +9,7 @@ type ReturnConfig = {
 type LockConfig = {
   enableLock: boolean;
   enableUnlockHack: boolean;
+  showTimeAlert: boolean;
   lockOutput: 'MONOFLOW_RELAY_1' | 'MONOFLOW_RELAY_2' | 'MONOFLOW_BUZ_1';
   lockChecklistTime: number;
 };

@@ -545,15 +545,23 @@ describe('onLogin', () => {
 });
 
 describe('onShowSubmit', () => {
+  function unlock() {
+    MonoUtils.storage.set('IS_DEVICE_LOCKED', false);
+    MonoUtils.wk.lock.unlock();
+  }
+
   // clean listeners
   afterEach(() => {
     messages.removeAllListeners();
-    MonoUtils.storage.set('IS_DEVICE_LOCKED', false);
+    unlock();
     MonoUtils.storage.set('LAST_LOGIN_AT', undefined);
     MonoUtils.storage.set('LAST_LOGIN', undefined);
   });
 
-  it('locks if more time than lockChecklistTime passes and enableLock is enabled', () => {
+  it('locks and generates event if more time than lockChecklistTime passes and enableLock is enabled', () => {
+    (env.project as any) = {
+      saveEvent: jest.fn(),
+    };
     getSettings = () => ({
       enableLock: true,
       lockChecklistTime: 10,
@@ -568,6 +576,31 @@ describe('onShowSubmit', () => {
     expect(MonoUtils.wk.lock.getLockState()).toBe(false);
     jest.advanceTimersByTime(100 * 60 * 1000);
     expect(MonoUtils.wk.lock.getLockState()).toBe(true);
+    expect(env.project.saveEvent).toBeCalled();
+    expect((env.project.saveEvent as jest.Mock).mock.calls[0][0].kind).toBe('checklist-overtime');
+    expect((env.project.saveEvent as jest.Mock).mock.calls[0][0].getData().checklistId).toBe('asdf');
+  });
+
+  it('shows alert if more time than lockChecklistTime passes, enableLock is enabled and showTimeAlert is enabled', () => {
+    unlock();
+    platform.setUrgentNotification = jest.fn();
+    getSettings = () => ({
+      enableLock: true,
+      lockChecklistTime: 10,
+      checklistId: 'asdf',
+      showTimeAlert: true,
+    });
+    loadScript();
+    messages.emit('onInit');
+    messages.emit('onShowSubmit', undefined, 'asdf');
+
+    expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+    jest.advanceTimersByTime(3 * 60 * 1000);
+    expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+    jest.advanceTimersByTime(100 * 60 * 1000);
+    expect(MonoUtils.wk.lock.getLockState()).toBe(true);
+    expect(platform.setUrgentNotification).toBeCalled();
+    expect(platform.setUrgentNotification).not.toHaveBeenCalledWith(null);
   });
 });
 
