@@ -109,6 +109,7 @@ messages.on('onLogin', function(l) {
   const deviceTags = env.project?.usersManager?.users?.find?.((u) => u.$modelId === myID())?.tags || [];
   const specialTags = conf.get('specialTags', []);
   const supervisorTags = specialTags.filter((tag) => tag.action === 'supervisor');
+  const loginTagsRestricted = conf.get('restrictiveTags', []).filter((t) => userTags.includes(t.tag));
   // deviceTags are not added to isLoginSupervisor since a device cannot be a supervisor
   const isLoginSupervisor = userTags.some((tag) => supervisorTags.some((supervisorTag) => supervisorTag.tag === tag));
   const isLocked = isDeviceLocked();
@@ -123,6 +124,14 @@ messages.on('onLogin', function(l) {
   if (isLocked && !isLoginSupervisor) {
     platform.log('Device is locked, but user is not a supervisor');
     return env.setData('RETURN_VALUE', {error: 'Supervisor requerido.'});
+  }
+
+  // check for restrictive tags
+  const isDeviceEnabled = loginTagsRestricted.some((t) => deviceTags.includes(t.tag));
+  if (loginTagsRestricted.length > 0 && !isDeviceEnabled) {
+    platform.log('blocking because of restricted-login', loginTagsRestricted, deviceTags);
+    const errMsg = conf.get('errorString', 'O dispositivo não está autorizado para esse login.');
+    return env.setData('RETURN_VALUE', {error: errMsg});
   }
 
   // update metadata

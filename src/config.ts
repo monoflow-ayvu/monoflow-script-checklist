@@ -59,11 +59,19 @@ type ChecklistQuestionsConfig = {
   checklistQuestions: ChecklistQuestion[];
 };
 
+type RestrictiveTagConfig = {
+  errorString: string;
+  restrictiveTags: {
+    tag: string;
+  }[];
+}
+
 type Config =
   ReturnConfig
   & LockConfig
   & SpecialTagsConfig
   & ChecklistQuestionsConfig
+  & RestrictiveTagConfig
   & {
     checklistId: string;
     checklistHours: number;

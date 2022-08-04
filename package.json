@@ -34,6 +34,40 @@
         "input": true
       },
       {
+        "label": "Erro para apresentar caso dispositivo não tenha a mesma tag restritiva",
+        "tableView": true,
+        "key": "errorString",
+        "type": "textfield",
+        "input": true,
+        "defaultValue": "O dispositivo não está autorizado para esse login."
+      },
+      {
+        "label": "Tags restritivos",
+        "tooltip": "Se um login tiver essa tag, só pode acessar numa maquina com a mesma tag.",
+        "reorder": true,
+        "addAnother": "Adicionar",
+        "addAnotherPosition": "bottom",
+        "layoutFixed": false,
+        "enableRowGroups": false,
+        "initEmpty": true,
+        "tableView": false,
+        "defaultValue": [],
+        "key": "restrictiveTags",
+        "type": "datagrid",
+        "input": true,
+        "components": [
+          {
+            "label": "Tag",
+            "tableView": true,
+            "case": "lowercase",
+            "truncateMultipleSpaces": true,
+            "key": "tag",
+            "type": "textfield",
+            "input": true
+          }
+        ]
+      },
+      {
         "label": "Habilitar retorno?",
         "tableView": false,
         "key": "enableReturn",
