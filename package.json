@@ -130,6 +130,14 @@
             "key": "lockChecklistTime",
             "type": "number",
             "input": true
+          },
+          {
+            "label": "Mostrar alerta ao superar o tempo límite?",
+            "tableView": false,
+            "key": "showTimeAlert",
+            "type": "checkbox",
+            "input": true,
+            "defaultValue": false
           }
         ]
       },
