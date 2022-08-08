@@ -161,6 +161,14 @@ messages.on('onLogin', function(l) {
     }
   }
 
+  // checklist hours needs to execute before special tags,
+  // to avoid returning a checklist when there shouldn't be one.
+  if (lastLogin === l && dateDiffHours < conf.get('checklistHours', 0)) {
+    platform.log('user has logged in before and is not overdue, skipping checklist');
+    MonoUtils.wk.lock.unlock();
+    return env.setData('RETURN_VALUE', '');
+  }
+
   // now we can verify special tags
   const login = env.project?.logins.find((ll) => ll.key === l);
   if (conf.get('enableSpecialTags', false)) {
@@ -176,12 +184,6 @@ messages.on('onLogin', function(l) {
         }
       }
     }
-  }
-
-  if (lastLogin === l && dateDiffHours < conf.get('checklistHours', 0)) {
-    platform.log('user has logged in before and is not overdue, skipping checklist');
-    MonoUtils.wk.lock.unlock();
-    return env.setData('RETURN_VALUE', '');
   }
 
   // we'll continue logic for locks on onSubmit
