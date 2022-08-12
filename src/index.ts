@@ -215,7 +215,7 @@ messages.on('onShowSubmit', (taskId, formId) => {
     checklistUnlockTimer = setTimeout(() => {
       platform.log('form not completed on time, locking checklist');
       MonoUtils.wk.lock.lock();
-      env.project?.saveEvent(new ChecklistOvertimeEvent(formId || ''));
+      env.project?.saveEvent(MonoUtils.wk.event.regenerateEvent(new ChecklistOvertimeEvent(formId || '')));
       if (conf.get('showTimeAlert', false)) {
         setUrgentNotification({
           title: 'Tempo para preencher checklist expirado',
