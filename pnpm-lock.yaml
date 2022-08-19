@@ -12,7 +12,7 @@ specifiers:
   '@types/commander': 2.12.2
   '@types/firebase': 3.2.1
   '@types/jest': 28.1.7
-  '@types/lodash': 4.14.183
+  '@types/lodash': 4.14.184
   '@types/node': 18.0.3
   '@types/uuid': 8.3.4
   babel-loader: 8.2.5
@@ -54,7 +54,7 @@ devDependencies:
   '@types/commander': 2.12.2
   '@types/firebase': 3.2.1
   '@types/jest': 28.1.7
-  '@types/lodash': 4.14.183
+  '@types/lodash': 4.14.184
   '@types/node': 18.0.3
   '@types/uuid': 8.3.4
   babel-loader: 8.2.5_xc6oct4hcywdrbo4ned6ytbybm
@@ -2392,8 +2392,8 @@ packages:
     resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
     dev: true
 
-  /@types/lodash/4.14.183:
-    resolution: {integrity: sha512-UXavyuxzXKMqJPEpFPri6Ku5F9af6ZJXUneHhvQJxavrEjuHkFp2YnDWHcxJiG7hk8ZkWqjcyNeW1s/smZv5cw==}
+  /@types/lodash/4.14.184:
+    resolution: {integrity: sha512-RoZphVtHbxPZizt4IcILciSWiC6dcn+eZ8oX9IWEYfDMcocdd42f7NPI6fQj+6zI8y4E0L7gu2pcZKLGTRaV9Q==}
     dev: true
 
   /@types/long/4.0.1:
