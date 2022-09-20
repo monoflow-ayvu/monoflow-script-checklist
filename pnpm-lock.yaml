@@ -30,7 +30,7 @@ specifiers:
   mobx-keystone: 0.67.3
   semver: 7.3.7
   size-limit: 7.0.8
-  ts-loader: 9.3.1
+  ts-loader: 9.4.1
   typed-emitter: 2.1.0
   typescript: 4.8.3
   webpack: 5.74.0
@@ -68,7 +68,7 @@ devDependencies:
   mobx-keystone: 0.67.3_mobx@6.6.2
   semver: 7.3.7
   size-limit: 7.0.8
-  ts-loader: 9.3.1_kb3egcnme7w23lfa5xodfjfhge
+  ts-loader: 9.4.1_kb3egcnme7w23lfa5xodfjfhge
   typed-emitter: 2.1.0
   typescript: 4.8.3
   webpack: 5.74.0_webpack-cli@4.10.0
@@ -3494,14 +3494,6 @@ packages:
       tapable: 2.2.1
     dev: true
 
-  /enhanced-resolve/5.9.3:
-    resolution: {integrity: sha512-Bq9VSor+kjvW3f9/MiiR4eE3XYgOl7/rS8lnSxbRbF3kS0B2r+Y9w5krBWxZgDxASVZbdYrn5wT4j/Wb0J9qow==}
-    engines: {node: '>=10.13.0'}
-    dependencies:
-      graceful-fs: 4.2.10
-      tapable: 2.2.1
-    dev: true
-
   /envinfo/7.8.1:
     resolution: {integrity: sha512-/o+BXHmB7ocbHEAs6F2EnG0ogybVVUdkRunTT2glZU9XAaGmhqskrvKwqXuDfNjEO0LZKWdejEEpnq8aM0tOaw==}
     engines: {node: '>=4'}
@@ -6261,15 +6253,15 @@ packages:
   /tr46/0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
 
-  /ts-loader/9.3.1_kb3egcnme7w23lfa5xodfjfhge:
-    resolution: {integrity: sha512-OkyShkcZTsTwyS3Kt7a4rsT/t2qvEVQuKCTg4LJmpj9fhFR7ukGdZwV6Qq3tRUkqcXtfGpPR7+hFKHCG/0d3Lw==}
+  /ts-loader/9.4.1_kb3egcnme7w23lfa5xodfjfhge:
+    resolution: {integrity: sha512-384TYAqGs70rn9F0VBnh6BPTfhga7yFNdC5gXbQpDrBj9/KsT4iRkGqKXhziofHOlE2j6YEaiTYVGKKvPhGWvw==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       typescript: '*'
       webpack: ^5.0.0
     dependencies:
       chalk: 4.1.2
-      enhanced-resolve: 5.9.3
+      enhanced-resolve: 5.10.0
       micromatch: 4.0.5
       semver: 7.3.7
       typescript: 4.8.3
