@@ -27,7 +27,7 @@ specifiers:
   jest: 29.2.0
   lodash: 4.17.21
   mobx: 6.6.2
-  mobx-keystone: 0.69.9
+  mobx-keystone: 1.1.1
   semver: 7.3.8
   size-limit: 7.0.8
   ts-loader: 9.4.1
@@ -37,8 +37,8 @@ specifiers:
   webpack-cli: 4.10.0
 
 dependencies:
-  '@fermuch/monoutils': 0.0.37_bk4agl4djamcbfeytpiajfefni
-  '@fermuch/telematree': 9.23.0_bk4agl4djamcbfeytpiajfefni
+  '@fermuch/monoutils': 0.0.37_nvg6svzoqjmshgquhcqyeifwhe
+  '@fermuch/telematree': 9.23.0_nvg6svzoqjmshgquhcqyeifwhe
   cross-fetch: 3.1.5
   firebase: 9.12.1
   lodash: 4.17.21
@@ -65,7 +65,7 @@ devDependencies:
   graphql-request: 5.0.0_graphql@16.6.0
   inquirer: 9.1.4
   jest: 29.2.0_@types+node@18.0.3
-  mobx-keystone: 0.69.9_mobx@6.6.2
+  mobx-keystone: 1.1.1_mobx@6.6.2
   semver: 7.3.8
   size-limit: 7.0.8
   ts-loader: 9.4.1_qqxisngxjbp7lstdk7boexbu3e
@@ -1344,10 +1344,10 @@ packages:
     engines: {node: '>=10.0.0'}
     dev: true
 
-  /@fermuch/monoutils/0.0.37_bk4agl4djamcbfeytpiajfefni:
+  /@fermuch/monoutils/0.0.37_nvg6svzoqjmshgquhcqyeifwhe:
     resolution: {integrity: sha512-aJa2sjB9p1FeKUdO3cEx+OoJSxzt+UqkTwL2w7pSlsKynag8XneXdh9DuHf88UxPSnx64kn2dadtA5hNLV5FTg==}
     dependencies:
-      '@fermuch/telematree': 9.23.0_bk4agl4djamcbfeytpiajfefni
+      '@fermuch/telematree': 9.23.0_nvg6svzoqjmshgquhcqyeifwhe
       typed-emitter: 2.1.0
     transitivePeerDependencies:
       - cross-fetch
@@ -1356,7 +1356,7 @@ packages:
       - mobx-keystone
     dev: false
 
-  /@fermuch/telematree/9.23.0_bk4agl4djamcbfeytpiajfefni:
+  /@fermuch/telematree/9.23.0_nvg6svzoqjmshgquhcqyeifwhe:
     resolution: {integrity: sha512-lsKuzVtnsutsgUvCG/LHTnq29MFvT5nkKDYZ1Tr50Q5SmxTZN4NrsvIzoiGbOovPg6u64xGsdqsmRFFPOZNdMA==}
     peerDependencies:
       cross-fetch: ^3.1.5
@@ -1372,7 +1372,7 @@ packages:
       imurmurhash: 0.1.4
       lodash: 4.17.21
       mobx: 6.6.2
-      mobx-keystone: 0.69.9_mobx@6.6.2
+      mobx-keystone: 1.1.1_mobx@6.6.2
       pure-uuid: 1.6.2
       typed-emitter: 2.1.0
     transitivePeerDependencies:
@@ -5228,8 +5228,8 @@ packages:
     hasBin: true
     dev: true
 
-  /mobx-keystone/0.69.9_mobx@6.6.2:
-    resolution: {integrity: sha512-WOHjKHsDsMVc0FAK7ib/a6cbGi83qSCnxq4RD6M5tX+7iDTlg7wVFiWXM3helXsl8ViOV55hV22Z3mUkCPZuIw==}
+  /mobx-keystone/1.1.1_mobx@6.6.2:
+    resolution: {integrity: sha512-RX+tdUtYFSk3BLJwsor2ZO5IsT32k7DAKIJJiMez1QilV8zGZDD7O7tAKk7dUhDveRwhrsWRNpeeVfPVRQtQ4A==}
     peerDependencies:
       mobx: ^6.0.0 || ^5.0.0 || ^4.0.0
     dependencies:
