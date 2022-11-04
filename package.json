@@ -403,7 +403,7 @@
     "@size-limit/preset-big-lib": "8.1.0",
     "@types/commander": "2.12.2",
     "@types/firebase": "3.2.1",
-    "@types/jest": "29.2.1",
+    "@types/jest": "29.2.2",
     "@types/lodash": "4.14.187",
     "@types/node": "18.11.9",
     "@types/uuid": "8.3.4",
