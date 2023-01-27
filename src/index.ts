@@ -2,7 +2,7 @@ import * as MonoUtils from "@fermuch/monoutils";
 import { ChecklistOvertimeEvent, HourmeterSetEvent, LockEvent, SessionEvent } from "./events";
 import { conf } from './config';
 import { currentLogin, myID } from "@fermuch/monoutils";
-import { setUrgentNotification } from "./utils";
+import { setUrgentNotification, getUrgentNotification } from "./utils";
 
 let checklistUnlockTimer: NodeJS.Timeout | null = null;
 const LAST_LOGIN_KEY = 'LAST_LOGIN' as const;
@@ -96,6 +96,13 @@ messages.on('onPeriodic', function() {
     && env.project?.currentLogin?.maybeCurrent === undefined
   ) {
     MonoUtils.wk.lock.lock();
+  }
+
+  const notif = getUrgentNotification();
+  if (!currentLogin() && notif) {
+    if (notif.actions?.find(((a) => a.action === ACTION_OK_TIMELIMIT))) {
+      setUrgentNotification(null);
+    }
   }
 });
 
