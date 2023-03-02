@@ -645,6 +645,48 @@ describe('onShowSubmit', () => {
     expect(platform.setUrgentNotification).toBeCalled();
     expect(platform.setUrgentNotification).not.toHaveBeenCalledWith(null);
   });
+
+  it('does NOT show alert if more time than lockChecklistTime passes but user skips checklist', () => {
+    unlock();
+    platform.setUrgentNotification = jest.fn();
+    const colStore = {} as Record<any, any>;
+    const mockCol = {
+      get() {
+        return {
+          data: colStore,
+          get: (k: string) => colStore[k],
+          set: (k: string, v: any) => (colStore[k] = v),
+        }
+      }
+    };
+    (env.project as any) = {
+      collectionsManager: {
+        ensureExists: () => mockCol,
+      },
+      saveEvent: jest.fn(),
+      logins: [{ key: '123', tags: ['omitChecklist'] }],
+    };
+    getSettings = () => ({
+      enableLock: true,
+      lockChecklistTime: 10,
+      checklistId: 'asdf',
+      showTimeAlert: true,
+      enableSpecialTags: true,
+      specialTags: [{ tag: 'omitChecklist', action: 'omitChecklist', customChecklistId: '' }],
+    });
+    loadScript();
+    messages.emit('onInit');
+    messages.emit('onLogin', '123', '');
+    messages.emit('onShowSubmit', undefined, 'asdf');
+
+    expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+    jest.advanceTimersByTime(3 * 60 * 1000);
+    expect(MonoUtils.wk.lock.getLockState()).toBe(false);
+    jest.advanceTimersByTime(100 * 60 * 1000);
+    expect(MonoUtils.wk.lock.getLockState()).toBe(true);
+    expect(platform.setUrgentNotification).toBeCalled();
+    expect(platform.setUrgentNotification).not.toHaveBeenCalledWith(null);
+  });
 });
 
 describe('onSubmit', () => {
