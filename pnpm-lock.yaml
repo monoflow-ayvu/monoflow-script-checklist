@@ -76,8 +76,8 @@ devDependencies:
     specifier: 6.0.0
     version: 6.0.0(graphql@16.6.0)
   inquirer:
-    specifier: 9.1.5
-    version: 9.1.5
+    specifier: 9.2.0
+    version: 9.2.0
   jest:
     specifier: 29.5.0
     version: 29.5.0(@types/node@18.16.0)
@@ -4203,8 +4203,8 @@ packages:
       through: 2.3.8
     dev: true
 
-  /inquirer@9.1.5:
-    resolution: {integrity: sha512-3ygAIh8gcZavV9bj6MTdYddG2zPSYswP808fKS46NOwlF0zZljVpnLCHODDqItWJDbDpLb3aouAxGaJbkxoppA==}
+  /inquirer@9.2.0:
+    resolution: {integrity: sha512-WWERbVqjsTXjXub1ZW0ZHDit1dyHqy0T9XIkky9TnmKAPrjU9Jkd59nZPK0dUuM3s73GZAZu2Jo4iFU3XSPVLA==}
     engines: {node: '>=14.18.0'}
     dependencies:
       ansi-escapes: 6.0.0
@@ -5799,7 +5799,7 @@ packages:
     resolution: {integrity: sha512-F2+gxDshqmIub1KdvZkaEfGDwLNpPvk9Fs6LD/MyQxNgMds/WH9OdDDXOmxUZpME+iSK3rQCctkL0DYyytUqMg==}
     requiresBuild: true
     dependencies:
-      tslib: 2.4.0
+      tslib: 2.5.0
 
   /safe-buffer@5.1.2:
     resolution: {integrity: sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==}
@@ -6253,9 +6253,6 @@ packages:
   /tslib@1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
     dev: true
-
-  /tslib@2.4.0:
-    resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
 
   /tslib@2.5.0:
     resolution: {integrity: sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==}
