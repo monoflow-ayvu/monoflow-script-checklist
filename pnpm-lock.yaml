@@ -96,13 +96,13 @@ devDependencies:
     version: 8.2.6
   ts-loader:
     specifier: 9.4.4
-    version: 9.4.4(typescript@5.1.5)(webpack@5.88.1)
+    version: 9.4.4(typescript@5.1.6)(webpack@5.88.1)
   typed-emitter:
     specifier: 2.1.0
     version: 2.1.0
   typescript:
-    specifier: 5.1.5
-    version: 5.1.5
+    specifier: 5.1.6
+    version: 5.1.6
   webpack:
     specifier: 5.88.1
     version: 5.88.1(webpack-cli@5.1.4)
@@ -6195,7 +6195,7 @@ packages:
   /tr46@0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
 
-  /ts-loader@9.4.4(typescript@5.1.5)(webpack@5.88.1):
+  /ts-loader@9.4.4(typescript@5.1.6)(webpack@5.88.1):
     resolution: {integrity: sha512-MLukxDHBl8OJ5Dk3y69IsKVFRA/6MwzEqBgh+OXMPB/OD01KQuWPFd1WAQP8a5PeSCAxfnkhiuWqfmFJzJQt9w==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -6206,7 +6206,7 @@ packages:
       enhanced-resolve: 5.15.0
       micromatch: 4.0.5
       semver: 7.5.3
-      typescript: 5.1.5
+      typescript: 5.1.6
       webpack: 5.88.1(webpack-cli@5.1.4)
     dev: true
 
@@ -6245,8 +6245,8 @@ packages:
     optionalDependencies:
       rxjs: 7.8.1
 
-  /typescript@5.1.5:
-    resolution: {integrity: sha512-FOH+WN/DQjUvN6WgW+c4Ml3yi0PH+a/8q+kNIfRehv1wLhWONedw85iu+vQ39Wp49IzTJEsZ2lyLXpBF7mkF1g==}
+  /typescript@5.1.6:
+    resolution: {integrity: sha512-zaWCozRZ6DLEWAWFrVDz1H6FVXzUSfTy5FUMWsQlU8Ym5JP9eO4xkTIROFCQvhQf61z6O/G6ugw3SgAnvvm+HA==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
