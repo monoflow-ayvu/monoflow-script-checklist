@@ -404,7 +404,7 @@
     "@types/commander": "2.12.2",
     "@types/firebase": "3.2.1",
     "@types/jest": "29.5.8",
-    "@types/lodash": "4.14.200",
+    "@types/lodash": "4.14.201",
     "@types/node": "20.8.10",
     "@types/uuid": "9.0.6",
     "babel-loader": "9.1.3",
