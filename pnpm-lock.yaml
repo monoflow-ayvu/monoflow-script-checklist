@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@fermuch/monoutils':
-    specifier: 0.0.37
-    version: 0.0.37(cross-fetch@3.1.8)(mobx-keystone@1.10.1)(mobx@6.12.1)
+    specifier: 0.2.0
+    version: 0.2.0(cross-fetch@3.1.8)(mobx-keystone@1.10.1)(mobx@6.12.1)
   '@fermuch/telematree':
     specifier: 9.23.0
     version: 9.23.0(cross-fetch@3.1.8)(mobx-keystone@1.10.1)(mobx@6.12.1)
@@ -1387,8 +1387,8 @@ packages:
     engines: {node: '>=10.0.0'}
     dev: true
 
-  /@fermuch/monoutils@0.0.37(cross-fetch@3.1.8)(mobx-keystone@1.10.1)(mobx@6.12.1):
-    resolution: {integrity: sha512-aJa2sjB9p1FeKUdO3cEx+OoJSxzt+UqkTwL2w7pSlsKynag8XneXdh9DuHf88UxPSnx64kn2dadtA5hNLV5FTg==}
+  /@fermuch/monoutils@0.2.0(cross-fetch@3.1.8)(mobx-keystone@1.10.1)(mobx@6.12.1):
+    resolution: {integrity: sha512-bbeNmaCiIJRdQYP8IsAQJ2qMFZTnLxyCidtSOO+0RgbaGqYXL1xoKlXMiX3FzNWrgBkftfZuD+o013ORahHNBA==}
     dependencies:
       '@fermuch/telematree': 9.23.0(cross-fetch@3.1.8)(mobx-keystone@1.10.1)(mobx@6.12.1)
       typed-emitter: 2.1.0
