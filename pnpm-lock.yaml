@@ -98,13 +98,13 @@ importers:
         version: 11.1.6
       ts-loader:
         specifier: 9.5.1
-        version: 9.5.1(typescript@5.6.2)(webpack@5.95.0)
+        version: 9.5.1(typescript@5.6.3)(webpack@5.95.0)
       typed-emitter:
         specifier: 2.1.0
         version: 2.1.0
       typescript:
-        specifier: 5.6.2
-        version: 5.6.2
+        specifier: 5.6.3
+        version: 5.6.3
       webpack:
         specifier: 5.95.0
         version: 5.95.0(webpack-cli@5.1.4)
@@ -3569,8 +3569,8 @@ packages:
   typed-emitter@2.1.0:
     resolution: {integrity: sha512-g/KzbYKbH5C2vPkaXGu8DJlHrGKHLsM25Zg9WuC9pMGfuvT+X25tZQWo5fK1BjBm8+UrVE9LDCvaY0CQk+fXDA==}
 
-  typescript@5.6.2:
-    resolution: {integrity: sha512-NW8ByodCSNCwZeghjN3o+JX5OFH0Ojg6sadjEKY4huZ52TqbJTJnDo5+Tw98lSy63NZvi4n+ez5m2u5d4PkZyw==}
+  typescript@5.6.3:
+    resolution: {integrity: sha512-hjcS1mhfuyi4WW8IWtjP7brDrG2cuDZukyrYrSauoXGNgx0S7zceP07adYkJycEr56BOUTNPzbInooiN3fn1qw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -8159,14 +8159,14 @@ snapshots:
 
   tr46@0.0.3: {}
 
-  ts-loader@9.5.1(typescript@5.6.2)(webpack@5.95.0):
+  ts-loader@9.5.1(typescript@5.6.3)(webpack@5.95.0):
     dependencies:
       chalk: 4.1.2
       enhanced-resolve: 5.15.0
       micromatch: 4.0.5
       semver: 7.6.3
       source-map: 0.7.4
-      typescript: 5.6.2
+      typescript: 5.6.3
       webpack: 5.95.0(webpack-cli@5.1.4)
 
   ts-toolbelt@9.6.0: {}
@@ -8190,7 +8190,7 @@ snapshots:
     optionalDependencies:
       rxjs: 7.8.1
 
-  typescript@5.6.2: {}
+  typescript@5.6.3: {}
 
   typical@4.0.0: {}
 
