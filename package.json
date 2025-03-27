@@ -405,7 +405,7 @@
     "@types/firebase": "3.2.1",
     "@types/jest": "29.5.14",
     "@types/lodash": "4.17.16",
-    "@types/node": "22.13.13",
+    "@types/node": "22.13.14",
     "@types/uuid": "10.0.0",
     "babel-loader": "10.0.0",
     "brotli-webpack-plugin": "1.1.0",
