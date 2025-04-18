@@ -49,8 +49,8 @@ importers:
         specifier: 2.12.2
         version: 2.12.2
       '@types/firebase':
-        specifier: 3.2.1
-        version: 3.2.1
+        specifier: 3.2.3
+        version: 3.2.3
       '@types/jest':
         specifier: 29.5.14
         version: 29.5.14
@@ -1323,9 +1323,9 @@ packages:
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
 
-  '@types/firebase@3.2.1':
-    resolution: {integrity: sha512-G8XgHMu2jHlElfc2xVNaYP50F0qrqeTCjgeG1v5b4SRwWG4XKC4fCuEdVZuZaMRmVygcnbRZBAo9O7RsDvmkGQ==}
-    deprecated: This is a stub types definition for Firebase API (https://www.firebase.com/docs/javascript/firebase). Firebase API provides its own type definitions, so you don't need @types/firebase installed!
+  '@types/firebase@3.2.3':
+    resolution: {integrity: sha512-fId22ajZ7CkTMnm/FveFcEGb7Trv97JsUk1Dvc1vIFDiwpVSGKeTUyBOA2Tr2riXe53ZP526G9WDCrq3ulE7tw==}
+    deprecated: This is a stub types definition. firebase provides its own type definitions, so you do not need this installed.
 
   '@types/graceful-fs@4.1.5':
     resolution: {integrity: sha512-anKkLmZZ+xm4p8JWBf4hElkM4XR+EZeA2M9BAkkTldmcyDY4mbdIJnRghDJH3Ov5ooY7/UAoENtmdMSkaAd7Cw==}
@@ -5394,7 +5394,7 @@ snapshots:
 
   '@types/estree@1.0.6': {}
 
-  '@types/firebase@3.2.1':
+  '@types/firebase@3.2.3':
     dependencies:
       firebase: 9.23.0
     transitivePeerDependencies:
