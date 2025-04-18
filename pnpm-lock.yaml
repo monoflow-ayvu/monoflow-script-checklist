@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@fermuch/monoutils':
-        specifier: 0.0.37
-        version: 0.0.37(cross-fetch@3.2.0)(mobx-keystone@1.11.4(mobx@6.13.7))(mobx@6.13.7)
+        specifier: 0.2.0
+        version: 0.2.0(cross-fetch@3.2.0)(mobx-keystone@1.11.4(mobx@6.13.7))(mobx@6.13.7)
       '@fermuch/telematree':
         specifier: 9.23.0
         version: 9.23.0(cross-fetch@3.2.0)(mobx-keystone@1.11.4(mobx@6.13.7))(mobx@6.13.7)
@@ -749,8 +749,8 @@ packages:
     resolution: {integrity: sha512-4B4OijXeVNOPZlYA2oEwWOTkzyltLao+xbotHQeqN++Rv27Y6s818+n2Qkp8q+Fxhn0t/5lA5X1Mxktud8eayQ==}
     engines: {node: '>=14.17.0'}
 
-  '@fermuch/monoutils@0.0.37':
-    resolution: {integrity: sha512-aJa2sjB9p1FeKUdO3cEx+OoJSxzt+UqkTwL2w7pSlsKynag8XneXdh9DuHf88UxPSnx64kn2dadtA5hNLV5FTg==}
+  '@fermuch/monoutils@0.2.0':
+    resolution: {integrity: sha512-bbeNmaCiIJRdQYP8IsAQJ2qMFZTnLxyCidtSOO+0RgbaGqYXL1xoKlXMiX3FzNWrgBkftfZuD+o013ORahHNBA==}
 
   '@fermuch/telematree@9.23.0':
     resolution: {integrity: sha512-lsKuzVtnsutsgUvCG/LHTnq29MFvT5nkKDYZ1Tr50Q5SmxTZN4NrsvIzoiGbOovPg6u64xGsdqsmRFFPOZNdMA==}
@@ -4528,7 +4528,7 @@ snapshots:
 
   '@discoveryjs/json-ext@0.6.3': {}
 
-  '@fermuch/monoutils@0.0.37(cross-fetch@3.2.0)(mobx-keystone@1.11.4(mobx@6.13.7))(mobx@6.13.7)':
+  '@fermuch/monoutils@0.2.0(cross-fetch@3.2.0)(mobx-keystone@1.11.4(mobx@6.13.7))(mobx@6.13.7)':
     dependencies:
       '@fermuch/telematree': 9.23.0(cross-fetch@3.2.0)(mobx-keystone@1.11.4(mobx@6.13.7))(mobx@6.13.7)
       typed-emitter: 2.1.0
